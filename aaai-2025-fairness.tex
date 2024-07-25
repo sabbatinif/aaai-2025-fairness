@@ -274,7 +274,7 @@ The definition of \emph{minimal difference} depends on the problem domain and co
 
 %In this section, we introduce the concept and definition of individual unfairness by expanding two different notions, i.e., \emph{explicit bias} and \emph{unequal treatment}.
 
-According to the current literature, an \emph{explicit bias} is present in a predictive model if its counterfactual explanations imply that at least one protected attribute should be changed to obtain different outcomes \cite{sokol2022fat}.
+According to the current literature, an \emph{explicit bias} is present in a predictive model if its counterfactual explanations imply that at least one protected attribute should be changed to obtain different outcomes \cite{sokol2022fat}. This definition also superpose with the concept of \emph{counterfactual fairness} \textbf{cite Kusner+ 2017}.
 
 \begin{definition}[Individual fairness: explicit bias]\label{explicit_bias}
 	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ for the individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with non-protected attribute values $\boldsymbol{x}_{i}$ and protected attribute values $\boldsymbol{a}_{i}$ belonging to the domain $\mathcal{Z}$ is \emph{explicitly biased} if the counterfactuals $\boldsymbol{z}_i^c = (\boldsymbol{x}_i^c, \boldsymbol{a}_i^c)$ have different values for some sensitive variables of $\boldsymbol{z}_i$, for at least one of the factual individuals, i.e., if $\exists \boldsymbol{z}_i \in \mathcal{Z} \mid \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c}$.
@@ -282,12 +282,12 @@ According to the current literature, an \emph{explicit bias} is present in a pre
 
 The concept of explicit bias can be expanded by introducing the definition of \emph{unequal treatment} at individual level based on counterfactuals.
 %
-A predictor providing different counterfactual explanations for a pair of similar individuals exhibits an unequal treatment for the individuals.
+A predictor providing different counterfactual explanations for a pair of similar individuals, receiving the same outcome,\footnote{We point out here that the unfair situation where two similar individuals receive a different outcome is beyond the scope of this work based on counterfactual fairness} exhibits an unequal treatment for the individuals.
 %
 This definition implies a different notion of fairness, ensuring that a predictor is fair only if similar individuals can change their outcomes by satisfying the same conditions. 
 
 \begin{definition}[Individual fairness: unequal treatment]\label{unequal_treatment}
-	A decision system based on the predictive function $\hat{Y}$ is responsible of \emph{unequal treatment} if two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$ with non-protected attribute values $\boldsymbol{x}_i, \boldsymbol{x}_j$ and protected attribute values $\boldsymbol{a}_i, \boldsymbol{a}_j$ are similar but have different counterfactuals, i.e., if $\exists \boldsymbol{z}_i, \boldsymbol{z}_j \in \mathcal{Z} \mid \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c$.
+	A decision system based on the predictive function $\hat{Y}$ is responsible of \emph{unequal treatment} if two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$ with non-protected attribute values $\boldsymbol{x}_i, \boldsymbol{x}_j$ and protected attribute values $\boldsymbol{a}_i, \boldsymbol{a}_j$ are similar and receive the same outcome, but have different counterfactuals, i.e., if $\exists \boldsymbol{z}_i, \boldsymbol{z}_j \in \mathcal{Z} \mid \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c$.
 \end{definition}
 
 Returning to the motivating example, individual fairness via explicit bias in the counterfactuals ensures that John can obtain the loan without altering any of his sensitive attributes, e.g., he is not required to change his gender to female.
@@ -298,17 +298,31 @@ The assessment of equal treatment should be conducted for all individuals who ar
 
 In the context of fairness measurement through counterfactual explanations, a formal definition of \emph{individual similarity} ($\sim$) is still missing in the literature. We propose the following to fill this gap.
 %
-\begin{definition}[Individual similarity]\label{similar_individuals}
+\begin{definition}[Threshold-based similarity]\label{similar_individuals}
 	Let $d: \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}^{+}$ be a distance function defined in the feature domain, representing the dissimilarity between two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$.
-	$\boldsymbol{z}_i$ and $\boldsymbol{z}_j$ are similar if the distance between their non-protected attribute values is smaller than a predefined threshold $\varepsilon$:
-	$$ \boldsymbol{z}_i \sim \boldsymbol{z}_j \iff d(\boldsymbol{x}_i, \boldsymbol{x}_j) < \varepsilon. $$
+	$\boldsymbol{z}_i$ and $\boldsymbol{z}_j$ are similar if their outcomes $\hat{y}_i$ and $\hat{y}_j$ are the same and the distance between their non-protected attribute values is smaller than a predefined threshold $\varepsilon$:
+	$$ \boldsymbol{z}_i \sim_\varepsilon \boldsymbol{z}_j \iff \hat{y}_i = \hat{y}_j \wedge d(\boldsymbol{x}_i, \boldsymbol{x}_j) < \varepsilon. $$
 \end{definition}
 %
 \noindent This definition implies that two individuals can be considered similar if they are ``close enough'' in the input space, regardless of their sensitive features. This aligns with fairness principles, as sensitive features should not influence the determination of similarity between two individuals who should be treated equally by automated decision-making systems.
 %
 The determination of the $\varepsilon$ threshold and the selection of the proper $d$ function should consider the specific task requirements, data peculiarities and problem domain. Common distance metrics include Euclidean and Manhattan distances and cosine similarity, amongst others.
 
-\Cref{explicit_bias,unequal_treatment} can be merged in the definition of a \emph{comprehensive individual fairness}, as follows.
+Aligned with the concept of \emph{fairness consistency} \textbf{cite Zemel+ 2013}, it is possible to define a neighbourhood-based similarity as follows.
+%
+\begin{definition}[Neighbourhood-based similarity]\label{similar_individuals_neigh}
+	Let $d: \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}^{+}$ be a distance function defined in the feature domain, representing the dissimilarity between two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with outcome $\hat{y}_i$ and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$ with outcome $\hat{y}_j$.
+	The $k$-neighbourhood of $\boldsymbol{z}_i$, denoted as $\mathcal{K}^{\boldsymbol{z}_i}$, contains the $k$ individuals $\boldsymbol{z}_j$ having the same outcome of $\boldsymbol{z}_i$ and minimising the distance from the non-protected attribute values of $\boldsymbol{z}_i$:
+	$$ \boldsymbol{z}_i \sim_k \boldsymbol{z}_j \iff \boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i}, $$
+	where
+	$$\mathcal{K}^{\boldsymbol{z}_i} \subseteq \mathcal{Z} \text{~s.t.~} \mid \mathcal{K}^{\boldsymbol{z}_i} \mid = k,$$
+	$$\hat{y}_j = \hat{y}_i, ~ \forall \boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i},$$
+	$$d(\boldsymbol{z}_i, \boldsymbol{z}_k) \geq \underset{\boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i}}{\max} d(\boldsymbol{z}_i, \boldsymbol{z}_j), ~ \forall \boldsymbol{z}_k \in \mathcal{Z} \setminus \mathcal{K}^{\boldsymbol{z}_i} \mid \hat{y}_k = \hat{y}_i.$$
+\end{definition}
+%
+\noindent In other words, all individuals outside the $k$-neighbourhood of $\boldsymbol{z}_i$ have larger distance from $\boldsymbol{z}_i$ than any of the $k$ individuals inside its $k$-neighbourhood, and all individuals in the neighbourhood share the same outcome.
+
+Finally, we present the definition of \emph{comprehensive individual fairness} by merging \Cref{explicit_bias,unequal_treatment}, as follows.
 %
 \begin{definition}[Comprehensive individual fairness]\label{comprehensive}
 	A decision system based on the predictive function $\hat{Y}$ is \emph{comprehensively individual-fair} if its outcomes are explicitly unbiased and exhibit equal treatment for similar individuals, i.e., $\boldsymbol{a}_i = \boldsymbol{a}_i^c \wedge \boldsymbol{z}_i^c = \boldsymbol{z}_j^c, \forall \boldsymbol{z}_i, \boldsymbol{z}_j \in \mathcal{Z} \mid \boldsymbol{z}_i \sim \boldsymbol{z}_j$.
