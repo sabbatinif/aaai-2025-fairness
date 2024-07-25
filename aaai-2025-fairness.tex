@@ -231,6 +231,10 @@ Let $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i) \in \mathcal{Z}$ re
 %
 Let $\hat{Y}$ denote a predictive function such that $\hat{Y}(\boldsymbol{x}_i, \boldsymbol{a}_i) = \hat{y}_i$, being $\hat{y}_i$ the prediction for instance $\boldsymbol{z}_i$.
 
+Let $\mathcal{Z}^{a_1=k_1,\dots,a_m=k_m}$ be the subset of domain $\mathcal{Z}$ where individuals belong to the protected group defined by the values $k_1,\dots,k_m$ of protected attributes $a_1,\dots,a_m$, e.g., $\mathcal{Z}^{gender=female}$.
+%
+Let $\mathcal{Z}_\mathbb{0}$ and $\mathcal{Z}_\mathbb{1}$ represent the subsets of domain $\mathcal{Z}$ where the outcome provided by $\hat{Y}$ is negative and positive, respectively. We denote with $\mathcal{Z}_\star$ any of $\mathcal{Z}_\mathbb{0}$ and $\mathcal{Z}_\mathbb{1}$ when a definition apply to both of them.
+
 Let $\boldsymbol{z}_i^c = (\boldsymbol{x}_i^c, \boldsymbol{a}_i^c) \in \mathcal{Z}$ represent a counterfactual for a given individual $\boldsymbol{z}_i$ with respect to a predictive model $\hat{Y}$, where $\boldsymbol{x}_i^c \in \mathcal{X}$ and $\boldsymbol{a}_i^c \in \mathcal{A}$. Specifically, $\boldsymbol{z}_i^c$ is \emph{minimally different} from $\boldsymbol{z}_i$ and $\hat{Y}(\boldsymbol{z}_i^c) \neq \hat{Y}(\boldsymbol{z}_i)$.
 
 %\begin{equation}
@@ -273,7 +277,7 @@ The definition of \emph{minimal difference} depends on the problem domain and co
 According to the current literature, an \emph{explicit bias} is present in a predictive model if its counterfactual explanations imply that at least one protected attribute should be changed to obtain different outcomes \cite{sokol2022fat}.
 
 \begin{definition}[Individual fairness: explicit bias]\label{explicit_bias}
-	A decision system based on the predictive function $\hat{Y}$ and providing the outcome $\hat{y}_i$ for the individual $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with non-protected attribute values $\boldsymbol{x}_{i}$ and protected attribute values $\boldsymbol{a}_{i}$ is \emph{explicitly biased} if the counterfactual $\boldsymbol{z}_i^c = (\boldsymbol{x}_i^c, \boldsymbol{a}_i^c)$ has different values for some sensitive variables of $\boldsymbol{z}_i$, i.e., if $\boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c}$.
+	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ for the individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with non-protected attribute values $\boldsymbol{x}_{i}$ and protected attribute values $\boldsymbol{a}_{i}$ belonging to the domain $\mathcal{Z}$ is \emph{explicitly biased} if the counterfactuals $\boldsymbol{z}_i^c = (\boldsymbol{x}_i^c, \boldsymbol{a}_i^c)$ have different values for some sensitive variables of $\boldsymbol{z}_i$, for at least one of the factual individuals, i.e., if $\exists \boldsymbol{z}_i \in \mathcal{Z} \mid \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c}$.
 \end{definition}
 
 The concept of explicit bias can be expanded by introducing the definition of \emph{unequal treatment} at individual level based on counterfactuals.
@@ -283,7 +287,7 @@ A predictor providing different counterfactual explanations for a pair of simila
 This definition implies a different notion of fairness, ensuring that a predictor is fair only if similar individuals can change their outcomes by satisfying the same conditions. 
 
 \begin{definition}[Individual fairness: unequal treatment]\label{unequal_treatment}
-	A decision system based on the predictive function $\hat{Y}$ \emph{treats unequally} two individuals $\boldsymbol{z}_1 = (\boldsymbol{x}_1, \boldsymbol{a}_1)$ and $\boldsymbol{z}_2 = (\boldsymbol{x}_2, \boldsymbol{a}_2)$ with non-protected attribute values $\boldsymbol{x}_{1}, \boldsymbol{x}_{2}$ and protected attribute values $\boldsymbol{a}_{1}, \boldsymbol{a}_{2}$ if $\boldsymbol{z}_1$ and $\boldsymbol{z}_2$ are similar but have different counterfactuals, i.e., if $\boldsymbol{z}_1 \sim \boldsymbol{z}_2$ and $\boldsymbol{z}_1^c \neq \boldsymbol{z}_2^c$.
+	A decision system based on the predictive function $\hat{Y}$ is responsible of \emph{unequal treatment} if two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$ with non-protected attribute values $\boldsymbol{x}_i, \boldsymbol{x}_j$ and protected attribute values $\boldsymbol{a}_i, \boldsymbol{a}_j$ are similar but have different counterfactuals, i.e., if $\exists \boldsymbol{z}_i, \boldsymbol{z}_j \in \mathcal{Z} \mid \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c$.
 \end{definition}
 
 Returning to the motivating example, individual fairness via explicit bias in the counterfactuals ensures that John can obtain the loan without altering any of his sensitive attributes, e.g., he is not required to change his gender to female.
@@ -295,9 +299,9 @@ The assessment of equal treatment should be conducted for all individuals who ar
 In the context of fairness measurement through counterfactual explanations, a formal definition of \emph{individual similarity} ($\sim$) is still missing in the literature. We propose the following to fill this gap.
 %
 \begin{definition}[Individual similarity]\label{similar_individuals}
-	Let $d: \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}^{+}$ be a distance function defined in the feature domain, representing the dissimilarity between two individuals $\boldsymbol{z}_1 = (\boldsymbol{x}_1, \boldsymbol{a}_1)$ and $\boldsymbol{z}_2 = (\boldsymbol{x}_2, \boldsymbol{a}_2)$.
-	$\boldsymbol{z}_1$ and $\boldsymbol{z}_2$ are similar if the distance between their non-protected attribute values is smaller than a predefined threshold $\varepsilon$:
-	$$ \boldsymbol{z}_1 \sim \boldsymbol{z}_2 \iff d(\boldsymbol{x}_1, \boldsymbol{x}_2) < \varepsilon. $$
+	Let $d: \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}^{+}$ be a distance function defined in the feature domain, representing the dissimilarity between two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$.
+	$\boldsymbol{z}_i$ and $\boldsymbol{z}_j$ are similar if the distance between their non-protected attribute values is smaller than a predefined threshold $\varepsilon$:
+	$$ \boldsymbol{z}_i \sim \boldsymbol{z}_j \iff d(\boldsymbol{x}_i, \boldsymbol{x}_j) < \varepsilon. $$
 \end{definition}
 %
 \noindent This definition implies that two individuals can be considered similar if they are ``close enough'' in the input space, regardless of their sensitive features. This aligns with fairness principles, as sensitive features should not influence the determination of similarity between two individuals who should be treated equally by automated decision-making systems.
@@ -307,28 +311,18 @@ The determination of the $\varepsilon$ threshold and the selection of the proper
 \Cref{explicit_bias,unequal_treatment} can be merged in the definition of a \emph{comprehensive individual fairness}, as follows.
 %
 \begin{definition}[Comprehensive individual fairness]\label{comprehensive}
-	A decision system based on the predictive function $\hat{Y}$ is \emph{comprehensively individual-fair} if its outcomes are explicitly unbiased and exhibit equal treatments for similar individuals.
+	A decision system based on the predictive function $\hat{Y}$ is \emph{comprehensively individual-fair} if its outcomes are explicitly unbiased and exhibit equal treatment for similar individuals, i.e., $\boldsymbol{a}_i = \boldsymbol{a}_i^c \wedge \boldsymbol{z}_i^c = \boldsymbol{z}_j^c, \forall \boldsymbol{z}_i, \boldsymbol{z}_j \in \mathcal{Z} \mid \boldsymbol{z}_i \sim \boldsymbol{z}_j$.
 \end{definition}
 
 \subsection{Group Fairness Based on Counterfactuals}
 
 \Cref{explicit_bias,unequal_treatment} can be extended to carry out group fairness evaluations based on counterfactuals.
 
-\begin{definition}[Group unfairness: explicit bias]\label{explicit_bias_group}
-	% 
-	Let $Z_{\boldsymbol{s}, k} = \{ \boldsymbol{z} \in Z : \boldsymbol{s} \in A \wedge f((\boldsymbol{x}, \boldsymbol{s})) = k \}$
-	denote the group of individuals identified by the values $\boldsymbol{s}$ of protected attributes and with decision $f(\boldsymbol{z})=k$.
-	%
-	A classifier $f(\boldsymbol{z})$ is considered unfair with respect to $\boldsymbol{s}$ if, for any $\boldsymbol{z}_i \in Z_{\boldsymbol{s}, k}$, there exists a counterfactual point s.t.
-	%$$f(z_i)=f(z_)$$
-	$$ f_{e}^{h}(\boldsymbol{z}_{i}) = \boldsymbol{z}_{i}^{c} = (\boldsymbol{x}_{i}^{c}, \boldsymbol{a}_{i}^{c}),  \quad \boldsymbol{s}_{i} \neq \boldsymbol{a}_{i}^{c}.$$
-	% \textbf{\textcolor{magenta}{ED: 
-			% A decision for the individual $\boldsymbol{z}_1$ with non-protected attribute values $\boldsymbol{x}_{1} \in X$ and protected attribute values $s \in A$, is \emph{group unfair} with respect to $s$ if the counterfactual point of the factual instance $\boldsymbol{z}_{1}$ has different values for some sensitive variable $A$: 
-			% $$ f_{e}^{h}(\boldsymbol{z}_{1}) = \boldsymbol{z}_{1}^{c} = (\boldsymbol{x}_{1}^{c}, \boldsymbol{a}_{1}^{c}),  \quad \boldsymbol{a}_{1} \neq \boldsymbol{a}_{1}^{c}, i.e., \boldsymbol{a}_{i}^{c} \neq s.$$
-			% }}
+We define the concept of explicit bias fairness for a protected group identified by $\boldsymbol{s}$ by considering all individuals within that group having the same decision and by ensuring that their counterfactual explanations do not contain sensitive attributes.
+
+\begin{definition}[Group fairness: explicit bias]\label{explicit_bias_group}
+	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ for the individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with non-protected attribute values $\boldsymbol{x}_{i}$ and protected attribute values $\boldsymbol{a}_{i}$ belonging to a protected group defined by $\mathcal{Z}_\star^{\boldsymbol{a}=\boldsymbol{s}}$ is \emph{explicitly biased} with respect to the group $\boldsymbol{s}$ if the counterfactuals $\boldsymbol{z}_i^c = (\boldsymbol{x}_i^c, \boldsymbol{a}_i^c)$ have different values for some sensitive variables of $\boldsymbol{z}_i$, for at least one of the factual individuals in the protected group, i.e., if $\exists \boldsymbol{z}_i \in \mathcal{Z}_\star^{\boldsymbol{a}=\boldsymbol{s}} \mid \boldsymbol{a}_i \neq \boldsymbol{a}_{i}^{c}$.
 \end{definition}
-%
-\noindent In a nutshell, the concept of group fairness established in this definition, with the protected group identified by $\boldsymbol{s}$, considers all individuals within that group which got the same decision, generates their counterfactuals and ensures that these counterfactual explanations do not contain sensitive attributes.
 
 \begin{definition}[Group unfairness: unequal treatment]\label{unequal_treatment_group}
 	Let $Z_{\boldsymbol{s}, k} = \{ \boldsymbol{z} \in Z : \boldsymbol{s} \in A \wedge f((\boldsymbol{x}, \boldsymbol{s})) = k \}$ denote the group of individuals identified by the values $\boldsymbol{s}$ of protected attribute and with decision $f(\boldsymbol{z})=k$.
