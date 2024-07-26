@@ -26,6 +26,7 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{amsthm}
+\usepackage{mathtools}
 \usepackage[bb=boondox]{mathalfa}
 \usepackage{booktabs}
 \usepackage{enumitem}
@@ -233,7 +234,7 @@ Let $\hat{Y}$ denote a predictive function such that $\hat{Y}(\boldsymbol{x}_i, 
 
 Let $\mathcal{Z}^{a_1=k_1,\dots,a_m=k_m}$ be the subset of domain $\mathcal{Z}$ where individuals belong to the protected group defined by the values $k_1,\dots,k_m$ of protected attributes $a_1,\dots,a_m$, e.g., $\mathcal{Z}^{gender=female}$.
 %
-Let $\mathcal{Z}_\mathbb{0}$ and $\mathcal{Z}_\mathbb{1}$ represent the subsets of domain $\mathcal{Z}$ where the outcome provided by $\hat{Y}$ is negative and positive, respectively. We denote with $\mathcal{Z}_\star$ any of $\mathcal{Z}_\mathbb{0}$ and $\mathcal{Z}_\mathbb{1}$ when a definition apply to both of them.
+%Let $\mathcal{Z}_\mathbb{0}$ and $\mathcal{Z}_\mathbb{1}$ represent the subsets of domain $\mathcal{Z}$ where the outcome provided by $\hat{Y}$ is negative and positive, respectively. We denote with $\mathcal{Z}_\star$ any of $\mathcal{Z}_\mathbb{0}$ and $\mathcal{Z}_\mathbb{1}$ when a definition apply to both of them.
 
 Let $\boldsymbol{z}_i^c = (\boldsymbol{x}_i^c, \boldsymbol{a}_i^c) \in \mathcal{Z}$ represent a counterfactual for a given individual $\boldsymbol{z}_i$ with respect to a predictive model $\hat{Y}$, where $\boldsymbol{x}_i^c \in \mathcal{X}$ and $\boldsymbol{a}_i^c \in \mathcal{A}$. Specifically, $\boldsymbol{z}_i^c$ is \emph{minimally different} from $\boldsymbol{z}_i$ and $\hat{Y}(\boldsymbol{z}_i^c) \neq \hat{Y}(\boldsymbol{z}_i)$.
 
@@ -277,7 +278,7 @@ The definition of \emph{minimal difference} depends on the problem domain and co
 According to the current literature, an \emph{explicit bias} is present in a predictive model if its counterfactual explanations imply that at least one protected attribute should be changed to obtain different outcomes \cite{sokol2022fat}. This definition also superpose with the concept of \emph{counterfactual fairness} \textbf{cite Kusner+ 2017}.
 
 \begin{definition}[Individual fairness: explicit bias]\label{explicit_bias}
-	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ for the individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with non-protected attribute values $\boldsymbol{x}_{i}$ and protected attribute values $\boldsymbol{a}_{i}$ belonging to the domain $\mathcal{Z}$ is \emph{explicitly biased} if the counterfactuals $\boldsymbol{z}_i^c = (\boldsymbol{x}_i^c, \boldsymbol{a}_i^c)$ have different values for some sensitive variables of $\boldsymbol{z}_i$, for at least one of the factual individuals, i.e., if $\exists \boldsymbol{z}_i \in \mathcal{Z} \mid \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c}$.
+	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ for the individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with non-protected attribute values $\boldsymbol{x}_{i}$ and protected attribute values $\boldsymbol{a}_{i}$ belonging to the domain $\mathcal{Z}$ is \emph{explicitly biased} if the counterfactuals $\boldsymbol{z}_i^c = (\boldsymbol{x}_i^c, \boldsymbol{a}_i^c)$ have different values for some sensitive variables of $\boldsymbol{z}_i$, for at least one of the factual individuals, i.e., if $\exists \boldsymbol{z}_i \in \mathcal{Z} : ~ \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c}$.
 \end{definition}
 
 The concept of explicit bias can be expanded by introducing the definition of \emph{unequal treatment} at individual level based on counterfactuals.
@@ -287,7 +288,7 @@ A predictor providing different counterfactual explanations for a pair of simila
 This definition implies a different notion of fairness, ensuring that a predictor is fair only if similar individuals can change their outcomes by satisfying the same conditions. 
 
 \begin{definition}[Individual fairness: unequal treatment]\label{unequal_treatment}
-	A decision system based on the predictive function $\hat{Y}$ is responsible of \emph{unequal treatment} if two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$, with non-protected attribute values $\boldsymbol{x}_i, \boldsymbol{x}_j$ and protected attribute values $\boldsymbol{a}_i, \boldsymbol{a}_j$, respectively, are similar and receive the same outcome, but have different counterfactuals, i.e., if $\exists \boldsymbol{z}_i, \boldsymbol{z}_j \in \mathcal{Z} \mid \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c$.
+	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ is responsible of \emph{unequal treatment} if two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$, with non-protected attribute values $\boldsymbol{x}_i, \boldsymbol{x}_j$ and protected attribute values $\boldsymbol{a}_i, \boldsymbol{a}_j$, respectively, are similar and receive the same outcome, but have different counterfactuals, i.e., if $\exists \boldsymbol{z}_i, \boldsymbol{z}_j \in \mathcal{Z} : ~ \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c$.
 \end{definition}
 
 Returning to the motivating example, individual fairness via explicit bias in the counterfactuals ensures that John can obtain the loan without altering any of his sensitive attributes, e.g., he is not required to change his gender to female.
@@ -315,17 +316,17 @@ Aligned with the concept of \emph{fairness consistency} \textbf{cite Zemel+ 2013
 	The $k$-neighbourhood of $\boldsymbol{z}_i$, denoted as $\mathcal{K}^{\boldsymbol{z}_i}$, contains the $k$ individuals $\boldsymbol{z}_j$ having the same outcome of $\boldsymbol{z}_i$ and minimising the distance from the non-protected attribute values of $\boldsymbol{z}_i$:
 	$$ \boldsymbol{z}_i \sim_k \boldsymbol{z}_j \iff \boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i}, $$
 	where
-	$$\mathcal{K}^{\boldsymbol{z}_i} \subseteq \mathcal{Z} \text{~s.t.~} \mid \mathcal{K}^{\boldsymbol{z}_i} \mid = k,$$
+	$$\mathcal{K}^{\boldsymbol{z}_i} \subseteq \mathcal{Z} : ~ | \mathcal{K}^{\boldsymbol{z}_i} | = k,$$
 	$$\hat{y}_j = \hat{y}_i, ~ \forall \boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i},$$
-	$$d(\boldsymbol{z}_i, \boldsymbol{z}_k) \geq \underset{\boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i}}{\max} d(\boldsymbol{z}_i, \boldsymbol{z}_j), ~ \forall \boldsymbol{z}_k \in \mathcal{Z} \setminus \mathcal{K}^{\boldsymbol{z}_i} \mid \hat{y}_k = \hat{y}_i.$$
+	$$d(\boldsymbol{z}_i, \boldsymbol{z}_k) \geq \underset{\boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i}}{\max} d(\boldsymbol{z}_i, \boldsymbol{z}_j), ~ \forall \boldsymbol{z}_k \in \mathcal{Z} \setminus \mathcal{K}^{\boldsymbol{z}_i} : ~ \hat{y}_k = \hat{y}_i.$$
 \end{definition}
 %
 \noindent In other words, all individuals outside the $k$-neighbourhood of $\boldsymbol{z}_i$ have larger distance from $\boldsymbol{z}_i$ than any of the $k$ individuals inside its $k$-neighbourhood, and all individuals in the neighbourhood share the same outcome.
 
 Finally, we present the definition of \emph{comprehensive individual fairness} by merging \Cref{explicit_bias,unequal_treatment}, as follows.
 %
-\begin{definition}[Comprehensive individual fairness]\label{comprehensive}
-	A decision system based on the predictive function $\hat{Y}$ is \emph{comprehensively individual-fair} if its outcomes are explicitly unbiased and exhibit equal treatment for similar individuals, i.e., $\boldsymbol{a}_i = \boldsymbol{a}_i^c \wedge \boldsymbol{z}_i^c = \boldsymbol{z}_j^c, \forall \boldsymbol{z}_i, \boldsymbol{z}_j \in \mathcal{Z} \mid \boldsymbol{z}_i \sim \boldsymbol{z}_j$.
+\begin{definition}[Individual comprehensive fairness]\label{comprehensive}
+	A decision system based on the predictive function $\hat{Y}$ is \emph{comprehensively individual-fair} if its outcomes are explicitly unbiased and exhibit equal treatment for similar individuals, i.e., $\boldsymbol{a}_i = \boldsymbol{a}_i^c \wedge \boldsymbol{z}_i^c = \boldsymbol{z}_j^c, \forall \boldsymbol{z}_i, \boldsymbol{z}_j \in \mathcal{Z} : ~ \boldsymbol{z}_i \sim \boldsymbol{z}_j$.
 \end{definition}
 
 \subsection{Group Fairness Based on Counterfactuals}
@@ -345,7 +346,7 @@ The notion of unequal treatment for a group identified by the values $\boldsymbo
 Unequal treatment is detected when such pairs of similar individuals receive different counterfactuals.
 %
 \begin{definition}[Group fairness: unequal treatment]\label{unequal_treatment_group}
-	A decision system based on the predictive function $\hat{Y}$ is responsible of \emph{unequal treatment} with respect to group $\mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}$ if two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ belonging to the protected group and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$ not belonging to the protected group, with non-protected attribute values $\boldsymbol{x}_i, \boldsymbol{x}_j$ and protected attribute values $\boldsymbol{a}_i, \boldsymbol{a}_j$, respectively, are similar and receive the same outcome, but have different counterfactuals, i.e., if $\exists \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}, \boldsymbol{z}_j \in \mathcal{Z} \setminus \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \mid \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c$.
+	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ is responsible of \emph{unequal treatment} with respect to group $\mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}$ if two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ belonging to the protected group and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$ not belonging to the protected group, with non-protected attribute values $\boldsymbol{x}_i, \boldsymbol{x}_j$ and protected attribute values $\boldsymbol{a}_i, \boldsymbol{a}_j$, respectively, are similar and receive the same outcome, but have different counterfactuals, i.e., if $\exists \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}, \boldsymbol{z}_j \in \mathcal{Z} \setminus \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : ~ \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c$.
 \end{definition}
 
 With reference to the aforementioned motivating example, counterfactual group fairness via explicit bias ensures that the individual bias for female applicants (e.g., Mary) is not stronger than the bias for male applicants (e.g., John). This is not equivalent to an absolute absence of individual bias, but it highlights that the predictive system is not making decisions to penalise a specific group.
@@ -354,61 +355,45 @@ On the other hand, by assessing group fairness through unequal treatment it is p
 
 The notions formalised in \Cref{explicit_bias_group,unequal_treatment_group} can be merged in a stricter concept of \emph{comprehensive group fairness}, as follows.
 %
-\begin{definition}[Comprehensive group fairness]\label{comprehensive_group}
-	A decision system based on the predictive function $\hat{Y}$ is \emph{comprehensively group-fair} if the explicit bias of its outcomes is homogeneous across the represented groups and if it exhibits equal treatment for similar individuals belonging to different groups, i.e., $\mathbb{P}(\boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c}) = \mathbb{P}(\boldsymbol{a}_{j} \neq \boldsymbol{a}_{j}^{c}) \wedge \boldsymbol{z}_i^c = \boldsymbol{z}_l^c, ~ \forall \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}, \boldsymbol{z}_j, \boldsymbol{z}_l \in \mathcal{Z} \setminus \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \mid \boldsymbol{z}_i \sim \boldsymbol{z}_l$.
+\begin{definition}[Group comprehensive fairness]\label{comprehensive_group}
+	A decision system based on the predictive function $\hat{Y}$ is \emph{comprehensively group-fair} if the explicit bias of its outcomes is homogeneous across the represented groups and if it exhibits equal treatment for similar individuals belonging to different groups, i.e., $\mathbb{P}(\boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c}) = \mathbb{P}(\boldsymbol{a}_{j} \neq \boldsymbol{a}_{j}^{c}) \wedge \boldsymbol{z}_i^c = \boldsymbol{z}_l^c, ~ \forall \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}, \boldsymbol{z}_j, \boldsymbol{z}_l \in \mathcal{Z} \setminus \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : ~ \boldsymbol{z}_i \sim \boldsymbol{z}_l$.
 \end{definition}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Fairness Metrics Based on Counterfactuals}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%Assume we have a dataset represented as $\{(\boldsymbol{x}_{1}, \boldsymbol{a}_{1}, y_{1}), \cdots , (\boldsymbol{x}_{n}, \boldsymbol{a}_{n}, y_{n})\}$ consisting of $n$ instances of $(X, A, Y)$. 
-% 
-%Let $f: Z \rightarrow \mathbb{R}$ denote a black-box classifier, where we denote by $\hat{y}=f(\boldsymbol{x}, \boldsymbol{a})$ the predicted outcome for a given input.
+Given the definitions provided in the previous section, we propose here computational fairness metrics to quantitatively assess the extent of individual and group fairness of a decision system through the generation of counterfactuals.
+%
+All metric scores are expressed in the [0, 1] interval, with values towards 1 identifying unfair decisions.
 
-In this section, the definitions of unfairness provided in the previous section are translated into computational fairness metrics. The pseudo-code for assessing fairness via counterfactuals is also provided.
+\paragraph{$\Phi_i^b$} [individual explicit bias, cf.\ \Cref{explicit_bias}] ratio of individuals whose counterfactual changes at least one sensitive attribute over all the individuals of the domain:
+%
+$$\Phi_i^b = \frac{ \mid \left\{ \boldsymbol{z}_i \in \mathcal{Z} : \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \right\} \mid }{\mid \mathcal{Z} \mid} $$
 
-For the sake of conciseness in the metrics definition and in the pseudo-code let us define the following sets:
-\begin{equation*}
-	Z_{k} := \{ \boldsymbol{z} \in Z : f((\boldsymbol{x}, \boldsymbol{a})) = k \},
-\end{equation*}
+\paragraph{$\Phi_i^t$} [individual unequal treatment, cf.\ \Cref{unequal_treatment}] ratio of individuals for which exists at least one similar individual receiving the same outcome but having a different counterfactual over all the individuals of the domain:
 %
-\begin{equation*}
-	Z_{\boldsymbol{s}, k} := \{ \boldsymbol{z} \in Z : \boldsymbol{s} \in A \wedge f((\boldsymbol{x}, \boldsymbol{s})) = k \},
-\end{equation*}
+$$\small \Phi_i^t = \frac{ \mid \left\{ \boldsymbol{z}_i \in \mathcal{Z} : \exists \boldsymbol{z}_j \in \mathcal{Z} \text{ s.t. } \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c \right\} \mid }{\mid \mathcal{Z} \mid} $$
+	
+%	\item[$\Phi_i$] [individual comprehensive fairness, cf.\ ] ratio of individuals whose counterfactual changes at least one sensitive attribute or for which exists at least one similar individual receiving a different counterfactual over all the individuals of the domain:
+%	%
+%	$$\Phi_i = \frac{ \mid \left\{ \boldsymbol{z}_i \in \mathcal{Z} : \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \vee  \exists \boldsymbol{z}_j \in \mathcal{Z} \text{ s.t. } \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c \right\} \mid }{\mid \mathcal{Z} \mid} $$
+	
+\paragraph{$\Phi_g^b$} [group explicit bias, cf.\ \Cref{explicit_bias_group}] difference between the maximum and minimum ratios of explicit biases calculated for all the represented groups, denoted by $\boldsymbol{s}$ values:
 %
-\begin{equation*}
-	Z_{\boldsymbol{sim}, k} (z) := \{ \boldsymbol{z}, \boldsymbol{w} \in Z \wedge \boldsymbol{z} \sim \boldsymbol{w} \wedge f(\boldsymbol{z}) = f(\boldsymbol{w}) = k\}.
-\end{equation*}
-% 
-%In order to study the unfairness of the classifier, we propose evaluating discrimination through the prism of counterfactual explanations.
-According to the definition in the previous subsection, we can quantify the proportion of unfair decisions at both individual and group levels.
+%$$\small \phi^b = \left\{ \frac{ | \left\{ \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \right\} | }{\mid \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \mid} : \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \text{\normalsize ~is a group} \right\}$$
+$$\phi^b = \underset{\boldsymbol{s}}{\bigcup} \left\{ \frac{ | \left\{ \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \right\} | }{\mid \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \mid} \right\}$$
 %
-Hence, by assuming that $(\boldsymbol{x}^{c}, \boldsymbol{a}^{c})$ is the counterfactual obtained by applying $f_e^h$ to $\boldsymbol{z}=(\boldsymbol{x}, \boldsymbol{a})$ (i.e., $f_e^h(\boldsymbol{z}) = (\boldsymbol{x}^{c}, \boldsymbol{a}^{c})$), we mathematically formulate the rates for a sample set aligned with the previously defined concepts as follows:
-\begin{description}
-	% 
-	\item[IndExp] [associated with Definition \ref{explicit_bias}] outputs how often the sensitive attribute changes between the factual and counterfactual instances for each class $k$:
-	$$IndExp(f,k) = \frac{|\{ \boldsymbol{z} \in Z_{k} : \boldsymbol{a}^{c} \neq \boldsymbol{a} \} |}
-	{|Z_{k}|}$$
-	% 
-	\item[IndUnTrtm] [associated with Definition \ref{unequal_treatment}] outputs how often the explanations differ compared to the ``most similar" individual for each class $k$:
-	$$IndUnTrtm(f,k) = $$
-	$$ = \frac{|\{ \boldsymbol{z} \in Z_{k} : 
-		\exists \boldsymbol{z}_{\star} \in Z_{\boldsymbol{sim}}, \boldsymbol{x}^{c} \neq \boldsymbol{x}_{\star}^{c} \}|}
-	{|Z_{k}|}$$
-	% 
-	\item[GrpExp] [associated with Definition \ref{explicit_bias_group}] outputs how often the sensitive attribute changes between the factual and counterfactual instances for each class $k$ and each protected group $\boldsymbol{s}$:
-	$$GrpExp(f, k, \boldsymbol{s}) = \frac{|\{ \boldsymbol{z} \in Z_{\boldsymbol{s}, k} : \boldsymbol{a}^{c} \neq \boldsymbol{s} \} |}
-	{|Z_{\boldsymbol{s}, k}|}$$
-	% 
-	\item[GrpUnTrtm] [associated with Definition \ref{unequal_treatment_group}] outputs how often the explanations are different with respect to the ``most similar" individual for each class $k$ and each protected group $\boldsymbol{s}$:
-	$$GrpUnTrtm(f, k, \boldsymbol{s}) = $$
-	$$ = \frac{|\{ \boldsymbol{z} \in Z_{\boldsymbol{s}, k} : 
-		\exists \boldsymbol{z}_{\star} \in Z_{\boldsymbol{sim}} \setminus Z_{\boldsymbol{s}, k}, \boldsymbol{x}^{c} \neq \boldsymbol{x}_{\star}^{c} |}
-	{|Z_{\boldsymbol{s}, k}|}$$
-\end{description}
-% 
-We point out that the calculation of group-specific rates relies on the demographic subpopulations under study.
+$$\Phi_g^b = \max \left\{ \phi^b \right\} - \min \left\{ \phi^b \right\} $$
+	
+\paragraph{$\Phi_g^t$} [group unequal treatment, cf.\ \Cref{unequal_treatment_group}] maximum ratio of unequal treatment calculated for all the represented groups, denoted by $\boldsymbol{s}$ values:
+%
+%$$\small \phi^t = \left\{ \frac{ \splitfrac{| \{ \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : \exists \boldsymbol{z}_j \in \mathcal{Z} \setminus \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}}{\text{s.t. } \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c \} |}}{\mid \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \mid} : \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \text{is a group} \right\} $$
+$$\phi^t = \underset{\boldsymbol{s}}{\bigcup} \left\{ \frac{ \splitfrac{\mid \{ \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : \exists \boldsymbol{z}_j \in \mathcal{Z} \setminus \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}}{\text{s.t. } \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c \} \mid}}{\mid \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \mid}\right\} $$
+%
+$$\Phi_g^t = \max \left\{ \phi^t \right\}$$
+
+\noindent Comprehensive fairness metrics descending from \Cref{comprehensive,comprehensive_group} can be easily obtained by merging the numerators in the above formulations.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experiments}
