@@ -124,6 +124,7 @@
 
 \begin{abstract}
 This study explores the potential of counterfactual explanations to assess algorithmic fairness, especially in critical decision-making systems. Since predictive models may amplify biases inherent in data sets or algorithms and given the absence of a universally accepted fairness metric, a case-specific approach becomes mandatory. Moreover, existing statistical fairness metrics often lack legal compliance or define fairness around thresholds defying universal definition.
+%RC comment:  stresserei la legal compliance di questa cosa
 %
 Our objective is to bridge the socio-legal-technical gap by introducing a fairness measure based on explainable artificial intelligence concepts. Specifically, we leverage counterfactual explanations and their comparison to identify bias. This work extends the existing literature by providing a more holistic definition of fairness, transcending the mere detection of protected/sensitive attributes in counterfactuals. Indeed, we propose to compare counterfactual explanations at individual/group level to ensure consistency in outcomes and treatments and to define quantitative fairness scoring metrics.
 %
@@ -154,12 +155,14 @@ In particular, explainable artificial intelligence (XAI) techniques \cite{846659
 According to this research direction, we propose studying counterfactual explanations from methods in the XAI field to detect and measure unfairness in AI-based decisions. In a nutshell, counterfactual explanations are hypothetical scenarios identifying the input features to be changed to obtain a different outcome (e.g., from rejection to acceptance) \cite{guidotti2022counterfactual,10.1145/3527848}. 
 
 The analysis of counterfactuals highlights whether the requirements to reverse a decision can be considered free from discrimination. Existing works on fairness via counterfactuals are often limited in scope and typically focus only on ensuring the concept of individual fairness. \textbf{mettere cit.}
+%RC comment: change limited in scope....rifrasamento needed
 %
 Depending on the domain, these approaches can be computationally expensive or even unfeasible.
 %
-Furthermore, current counterfactual fairness measurements are applied only at individual level and not to express group fairness \cite{wachter2017counterfactual}.
+Furthermore, current counterfactual fairness measurements are applied only at the individual level and not to express group fairness \cite{wachter2017counterfactual}.
 %
 Accordingly, the contributions of this work aim at enhancing the current literature about counterfactual fairness.
+%rRC comment: dire meglio il contributo
 %
 First, we define individual and group fairness metrics exploiting counterfactual explanations and based on the presence of protected and sensitive attributes\footnote{In this work we adopt the terms ``protected'' and ``sensitive'' as synonyms, since the fairness considerations discussed here apply to both categories}, consistently with the current literature.
 %
@@ -178,7 +181,7 @@ Finally, we propose computationally feasible fairness metrics based on these def
 %http://xkdd2022.isti.cnr.it/papers/XKDD_2022_paper_4626.pdf
 
 \paragraph{Motivating example.}
-We introduce a running example to better understand the scenario and our definitions. A bank company needs to select individuals to grant loans from a large pool of applicants. An ML predictive algorithm, based on applicants' data (e.g., yearly income, occupation, education, age, and gender), is thus developed to make decisions. Specifically, the system predicts whether a candidate would have the possibility to repay the loan, and those individuals are granted a loan. However, the algorithm tends to generate more positive predictions for one gender (e.g., males) compared to others (e.g., females and non-binary individuals). In particular, John and Mark, male candidates, receive positive outcomes, whereas Clara and Mary, female candidates, receive rejections, even though all four individuals appear qualified to receive the loan. To address this bias, the company implement fair ML techniques to mitigate the issue. Unfortunately, as a result of this modification, John is denied a loan, seemingly without explanation. In this new scenario, Mark and Clara receive the loan, while John and Mary do not. John raises a complaint, citing examples of individuals, Clara and Mark, who were granted loans despite possessing qualifications similar to his. Should the company persist in its position or should it modify the model once again to ensure fairness?
+We introduce a running example to better understand the scenario and our definitions. A bank company needs to select individuals to grant loans from a large pool of applicants. An ML predictive algorithm, based on applicants' data (e.g., yearly income, occupation, education, age, and gender), is thus developed to make decisions. Specifically, the system predicts whether a candidate would have the possibility to repay the loan, and those individuals are granted a loan. However, the algorithm tends to generate more positive predictions for one gender (e.g., males) compared to others (e.g., females and non-binary individuals). In particular, John and Mark, male candidates, receive positive outcomes, whereas Clara and Mary, female candidates, receive rejections, even though all four individuals appear qualified to receive the loan. To address this bias, the company implements fair ML techniques to mitigate the issue. Unfortunately, as a result of this modification, John is denied a loan, seemingly without explanation. In this new scenario, Mark and Clara receive the loan, while John and Mary do not. John raises a complaint, citing examples of individuals, Clara and Mark, who were granted loans despite possessing qualifications similar to his. Should the company persist in its position or should it modify the model once again to ensure fairness?
 
 Generally speaking, when considering a situation where a loan application is declined, a fair decision entails that the explanation provided by the company about the required changes to receive credit remains independent of sensitive attributes (e.g., gender, or ethnicity). Accordingly, the counterfactual explanation for John receiving the loan should be produced by the system, and if no sensitive attribute is contained, the decision should be considered fair. This is what existing works usually address.
 
@@ -286,10 +289,12 @@ The concept of explicit bias can be expanded by introducing the definition of \e
 A predictor providing different counterfactual explanations for a pair of similar individuals, receiving the same outcome,\footnote{We point out here that the unfair situation where two similar individuals receive a different outcome is beyond the scope of this work based on counterfactual fairness} exhibits an unequal treatment for the individuals.
 %
 This definition implies a different notion of fairness, ensuring that a predictor is fair only if similar individuals can change their outcomes by satisfying the same conditions. 
+% farei qui il collegamento con la legge per unequal treatment
 
 \begin{definition}[Individual fairness: unequal treatment]\label{unequal_treatment}
 	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ is responsible of \emph{unequal treatment} if two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$, with non-protected attribute values $\boldsymbol{x}_i, \boldsymbol{x}_j$ and protected attribute values $\boldsymbol{a}_i, \boldsymbol{a}_j$, respectively, are similar and receive the same outcome, but have different counterfactuals, i.e., if $\exists \boldsymbol{z}_i, \boldsymbol{z}_j \in \mathcal{Z} : ~ \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c$.
 \end{definition}
+%RC comment: similar individual not defined
 
 Returning to the motivating example, individual fairness via explicit bias in the counterfactuals ensures that John can obtain the loan without altering any of his sensitive attributes, e.g., he is not required to change his gender to female.
 %
@@ -310,6 +315,7 @@ In the context of fairness measurement through counterfactual explanations, a fo
 The determination of the $\varepsilon$ threshold and the selection of the proper $d$ function should consider the specific task requirements, data peculiarities and problem domain. Common distance metrics include Euclidean and Manhattan distances and cosine similarity, amongst others.
 
 Aligned with the concept of \emph{fairness consistency} \textbf{cite Zemel+ 2013}, it is possible to define a neighbourhood-based similarity as follows.
+%RC comment: non lo chiamano fairness consistency, solo consistency. ed è secondo me un po' diverso.
 %
 \begin{definition}[Neighbourhood-based similarity]\label{similar_individuals_neigh}
 	Let $d: \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}^{+}$ be a distance function defined in the feature domain, representing the dissimilarity between two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with outcome $\hat{y}_i$ and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$ with outcome $\hat{y}_j$.
