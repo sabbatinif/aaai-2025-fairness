@@ -162,7 +162,7 @@ Depending on the domain, these approaches can be computationally expensive or ev
 Furthermore, current counterfactual fairness measurements are applied only at the individual level and not to express group fairness \cite{wachter2017counterfactual}.
 %
 Accordingly, the contributions of this work aim at enhancing the current literature about counterfactual fairness.
-%rRC comment: dire meglio il contributo
+%RC comment: dire meglio il contributo
 %
 First, we define individual and group fairness metrics exploiting counterfactual explanations and based on the presence of protected and sensitive attributes\footnote{In this work we adopt the terms ``protected'' and ``sensitive'' as synonyms, since the fairness considerations discussed here apply to both categories}, consistently with the current literature.
 %
@@ -289,7 +289,7 @@ The concept of explicit bias can be expanded by introducing the definition of \e
 A predictor providing different counterfactual explanations for a pair of similar individuals, receiving the same outcome,\footnote{We point out here that the unfair situation where two similar individuals receive a different outcome is beyond the scope of this work based on counterfactual fairness} exhibits an unequal treatment for the individuals.
 %
 This definition implies a different notion of fairness, ensuring that a predictor is fair only if similar individuals can change their outcomes by satisfying the same conditions. 
-% farei qui il collegamento con la legge per unequal treatment
+%RC comment: farei qui il collegamento con la legge per unequal treatment
 
 \begin{definition}[Individual fairness: unequal treatment]\label{unequal_treatment}
 	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ is responsible of \emph{unequal treatment} if two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$, with non-protected attribute values $\boldsymbol{x}_i, \boldsymbol{x}_j$ and protected attribute values $\boldsymbol{a}_i, \boldsymbol{a}_j$, respectively, are similar and receive the same outcome, but have different counterfactuals, i.e., if $\exists \boldsymbol{z}_i, \boldsymbol{z}_j \in \mathcal{Z} : ~ \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c$.
@@ -314,9 +314,8 @@ In the context of fairness measurement through counterfactual explanations, a fo
 %
 The determination of the $\varepsilon$ threshold and the selection of the proper $d$ function should consider the specific task requirements, data peculiarities and problem domain. Common distance metrics include Euclidean and Manhattan distances and cosine similarity, amongst others.
 
-Aligned with the concept of \emph{fairness consistency} \textbf{cite Zemel+ 2013}, it is possible to define a neighbourhood-based similarity as follows.
-%RC comment: non lo chiamano fairness consistency, solo consistency. ed è secondo me un po' diverso.
-%Rc comment 2: la cosa degli outliers che ti ho detto nel messaggio vocale va secondo me detta. punto di forza per la fairness.
+Inspired to the concept of \emph{consistency} introduced by \textbf{cite Zemel+ 2013}, it is possible to define a neighbourhood-based similarity as follows.
+%RC comment: la cosa degli outliers che ti ho detto nel messaggio vocale va secondo me detta. punto di forza per la fairness.
 %
 \begin{definition}[Neighbourhood-based similarity]\label{similar_individuals_neigh}
 	Let $d: \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}^{+}$ be a distance function defined in the feature domain, representing the dissimilarity between two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with outcome $\hat{y}_i$ and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$ with outcome $\hat{y}_j$.
@@ -325,10 +324,10 @@ Aligned with the concept of \emph{fairness consistency} \textbf{cite Zemel+ 2013
 	where
 	$$\mathcal{K}^{\boldsymbol{z}_i} \subseteq \mathcal{Z} : ~ | \mathcal{K}^{\boldsymbol{z}_i} | = k,$$
 	$$\hat{y}_j = \hat{y}_i, ~ \forall \boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i},$$
-	$$d(\boldsymbol{z}_i, \boldsymbol{z}_k) \geq \underset{\boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i}}{\max} d(\boldsymbol{z}_i, \boldsymbol{z}_j), ~ \forall \boldsymbol{z}_k \in \mathcal{Z} \setminus \mathcal{K}^{\boldsymbol{z}_i} : ~ \hat{y}_k = \hat{y}_i.$$
+	$$d(\boldsymbol{x}_i, \boldsymbol{x}_k) \geq \underset{\boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i}}{\max} d(\boldsymbol{x}_i, \boldsymbol{x}_j), ~ \forall \boldsymbol{z}_k \in \mathcal{Z} \setminus \mathcal{K}^{\boldsymbol{z}_i} : ~ \hat{y}_k = \hat{y}_i.$$
 \end{definition}
 %
-\noindent In other words, all individuals outside the $k$-neighbourhood of $\boldsymbol{z}_i$ have larger distance from $\boldsymbol{z}_i$ than any of the $k$ individuals inside its $k$-neighbourhood, and all individuals in the neighbourhood share the same outcome.
+\noindent In other words, all individuals outside the $k$-neighbourhood of $\boldsymbol{z}_i$ have larger distance from $\boldsymbol{z}_i$ than any of the $k$ individuals inside its $k$-neighbourhood, all individuals in the neighbourhood share the same outcome and the sensitive attributes are not taken into account in the distance determination.
 
 Finally, we present the definition of \emph{comprehensive individual fairness} by merging \Cref{explicit_bias,unequal_treatment}, as follows.
 %
@@ -340,30 +339,30 @@ Finally, we present the definition of \emph{comprehensive individual fairness} b
 
 \Cref{explicit_bias,unequal_treatment} can be extended to carry out group fairness evaluations based on counterfactuals.
 
-We define the concept of explicit bias for a group identified by the values $\boldsymbol{s}$ of the protected attributes by checking whether the explicit bias for individuals belonging to the protected group is stronger than the bias for individuals outside the group.
+We define the concept of explicit bias for a group identified by the values $\boldsymbol{s}$ of the protected attributes by checking whether the explicit bias for individuals belonging to a specific group is different than the bias for individuals within a different group.
 %
 The notion of individual bias is the same given in \Cref{explicit_bias}.
 %
 \begin{definition}[Group fairness: explicit bias]\label{explicit_bias_group}
-	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ for the individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with non-protected attribute values $\boldsymbol{x}_{i}$ and protected attribute values $\boldsymbol{a}_{i}$ belonging to the domain $\mathcal{Z}$ is \emph{explicitly biased} if the counterfactuals $\boldsymbol{z}_i^c = (\boldsymbol{x}_i^c, \boldsymbol{a}_i^c)$ for factual individuals belonging to the protected group $\mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}$ are more prone to have different values for some sensitive variables of $\boldsymbol{z}_i$, i.e., if $\mathbb{P}(\boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \mid \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}) > \mathbb{P}(\boldsymbol{a}_{j} \neq \boldsymbol{a}_{j}^{c} \mid \boldsymbol{z}_j \in \mathcal{Z} \setminus \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}})$.
+	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ for the individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with non-protected attribute values $\boldsymbol{x}_{i}$ and protected attribute values $\boldsymbol{a}_{i}$ belonging to the domain $\mathcal{Z}$ is \emph{explicitly biased} if the counterfactuals $\boldsymbol{z}_i^c = (\boldsymbol{x}_i^c, \boldsymbol{a}_i^c)$ for factual individuals belonging to the group $\mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}$ have a different probability to contain different values for some sensitive variables of $\boldsymbol{z}_i$ with respect to the counterfactuals for individuals of another group $\mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'}$, i.e., if $\mathbb{P}(\boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \mid \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}) \neq \mathbb{P}(\boldsymbol{a}_{j} \neq \boldsymbol{a}_{j}^{c} \mid \boldsymbol{z}_j \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'}), \forall \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}, \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'} \subseteq \mathcal{Z} : ~ \boldsymbol{s} \neq \boldsymbol{s}'$.
 \end{definition}
 
-The notion of unequal treatment for a group identified by the values $\boldsymbol{s}$ of the protected attributes is formalised by comparing the counterfactual explanations for the individuals in the protected group with those generated for similar individuals outside the group who received the same outcomes.
+The notion of unequal treatment for a group identified by the values $\boldsymbol{s}$ of the protected attributes is formalised by comparing the counterfactual explanations for the individuals in the protected group with those generated for similar individuals belonging to the other groups who received the same outcomes.
 %
 Unequal treatment is detected when such pairs of similar individuals receive different counterfactuals.
 %
 \begin{definition}[Group fairness: unequal treatment]\label{unequal_treatment_group}
-	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ is responsible of \emph{unequal treatment} with respect to group $\mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}$ if two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ belonging to the protected group and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$ not belonging to the protected group, with non-protected attribute values $\boldsymbol{x}_i, \boldsymbol{x}_j$ and protected attribute values $\boldsymbol{a}_i, \boldsymbol{a}_j$, respectively, are similar and receive the same outcome, but have different counterfactuals, i.e., if $\exists \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}, \boldsymbol{z}_j \in \mathcal{Z} \setminus \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : ~ \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c$.
+	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ is responsible of \emph{unequal treatment} with respect to group $\mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}$ if for an individual $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ belonging to that group, with non-protected attribute values $\boldsymbol{x}_i$ and protected attribute values $\boldsymbol{a}_i$, it is possible to find a similar individual belonging to a different group $\mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'}$, who receives the same outcome but a different counterfactual, i.e., if $\exists \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}, \boldsymbol{z}_j \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'} : ~ \boldsymbol{s} \neq \boldsymbol{s}' \wedge \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c$.
 \end{definition}
 
 With reference to the aforementioned motivating example, counterfactual group fairness via explicit bias ensures that the individual bias for female applicants (e.g., Mary) is not stronger than the bias for male applicants (e.g., John). This is not equivalent to an absolute absence of individual bias, but it highlights that the predictive system is not making decisions to penalise a specific group.
 %
-On the other hand, by assessing group fairness through unequal treatment it is possible to ensure that similar individuals of different groups who where denied the loan (e.g., John and Mary) can obtain it by fulfilling the same requirements, without receiving different treatments based on their group belonging.
+On the other hand, by assessing group fairness through unequal treatment it is possible to ensure that similar individuals of different groups who were denied the loan (e.g., John and Mary) can obtain it by fulfilling the same requirements, without receiving different treatments based on their group belonging.
 
 The notions formalised in \Cref{explicit_bias_group,unequal_treatment_group} can be merged in a stricter concept of \emph{comprehensive group fairness}, as follows.
 %
 \begin{definition}[Group comprehensive fairness]\label{comprehensive_group}
-	A decision system based on the predictive function $\hat{Y}$ is \emph{comprehensively group-fair} if the explicit bias of its outcomes is homogeneous across the represented groups and if it exhibits equal treatment for similar individuals belonging to different groups, i.e., $\mathbb{P}(\boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c}) = \mathbb{P}(\boldsymbol{a}_{j} \neq \boldsymbol{a}_{j}^{c}) \wedge \boldsymbol{z}_i^c = \boldsymbol{z}_l^c, ~ \forall \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}, \boldsymbol{z}_j, \boldsymbol{z}_l \in \mathcal{Z} \setminus \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : ~ \boldsymbol{z}_i \sim \boldsymbol{z}_l$.
+	A decision system based on the predictive function $\hat{Y}$ is \emph{comprehensively group-fair} if the explicit bias of its outcomes is homogeneous across the represented groups and if it exhibits equal treatment for similar individuals belonging to different groups, i.e., $\mathbb{P}(\boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c}) = \mathbb{P}(\boldsymbol{a}_{j} \neq \boldsymbol{a}_{j}^{c}) \wedge \boldsymbol{z}_i^c = \boldsymbol{z}_l^c, ~ \forall \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}, \boldsymbol{z}_j, \boldsymbol{z}_l \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'} : ~ \boldsymbol{s} \neq \boldsymbol{s}' \wedge \boldsymbol{z}_i \sim \boldsymbol{z}_l$.
 \end{definition}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
