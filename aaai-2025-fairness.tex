@@ -344,7 +344,7 @@ We define the concept of explicit bias for a group identified by the values $\bo
 The notion of individual bias is the same given in \Cref{explicit_bias}.
 %
 \begin{definition}[Group fairness: explicit bias]\label{explicit_bias_group}
-	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ for the individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with non-protected attribute values $\boldsymbol{x}_{i}$ and protected attribute values $\boldsymbol{a}_{i}$ belonging to the domain $\mathcal{Z}$ is \emph{explicitly biased} if the counterfactuals $\boldsymbol{z}_i^c = (\boldsymbol{x}_i^c, \boldsymbol{a}_i^c)$ for factual individuals belonging to the group $\mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}$ have a different probability to contain different values for some sensitive variables of $\boldsymbol{z}_i$ with respect to the counterfactuals for individuals of another group $\mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'}$, i.e., if $\mathbb{P}(\boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \mid \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}) \neq \mathbb{P}(\boldsymbol{a}_{j} \neq \boldsymbol{a}_{j}^{c} \mid \boldsymbol{z}_j \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'}), \forall \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}, \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'} \subseteq \mathcal{Z} : ~ \boldsymbol{s} \neq \boldsymbol{s}'$.
+	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ for the individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with non-protected attribute values $\boldsymbol{x}_{i}$ and protected attribute values $\boldsymbol{a}_{i}$ belonging to the domain $\mathcal{Z}$ is \emph{explicitly biased} if the counterfactuals $\boldsymbol{z}_i^c = (\boldsymbol{x}_i^c, \boldsymbol{a}_i^c)$ for factual individuals belonging to the group $\mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}$ have a different probability to contain different values for some sensitive variables of $\boldsymbol{z}_i$ with respect to the counterfactuals for individuals of another group $\mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'}$, i.e., if $\exists \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}, \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'} \subseteq \mathcal{Z} : ~ \boldsymbol{s} \neq \boldsymbol{s}' \wedge \mathbb{P}(\boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \mid \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}) \neq \mathbb{P}(\boldsymbol{a}_{j} \neq \boldsymbol{a}_{j}^{c} \mid \boldsymbol{z}_j \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'})$.
 \end{definition}
 
 The notion of unequal treatment for a group identified by the values $\boldsymbol{s}$ of the protected attributes is formalised by comparing the counterfactual explanations for the individuals in the protected group with those generated for similar individuals belonging to the other groups who received the same outcomes.
@@ -373,31 +373,31 @@ Given the definitions provided in the previous section, we propose here computat
 %
 All metric scores are expressed in the [0, 1] interval, with values towards 1 identifying unfair decisions.
 
-\paragraph{$\Phi_i^b$} [individual explicit bias, cf.\ \Cref{explicit_bias}] ratio of individuals whose counterfactual changes at least one sensitive attribute over all the individuals of the domain:
+\paragraph{$\Phi_b^i$} [individual explicit bias, cf.\ \Cref{explicit_bias}] ratio of individuals whose counterfactual changes at least one sensitive attribute over all the individuals of the domain:
 %
-$$\Phi_i^b = \frac{ \mid \left\{ \boldsymbol{z}_i \in \mathcal{Z} : \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \right\} \mid }{\mid \mathcal{Z} \mid} $$
+$$\Phi_b^i = \frac{ \mid \left\{ \boldsymbol{z}_i \in \mathcal{Z} : \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \right\} \mid }{\mid \mathcal{Z} \mid} $$
 
-\paragraph{$\Phi_i^t$} [individual unequal treatment, cf.\ \Cref{unequal_treatment}] ratio of individuals for which exists at least one similar individual receiving the same outcome but having a different counterfactual over all the individuals of the domain:
+\paragraph{$\Phi_t^i$} [individual unequal treatment, cf.\ \Cref{unequal_treatment}] ratio of individuals for which exists at least one similar individual receiving the same outcome but having a different counterfactual over all the individuals of the domain:
 %
-$$\small \Phi_i^t = \frac{ \mid \left\{ \boldsymbol{z}_i \in \mathcal{Z} : \exists \boldsymbol{z}_j \in \mathcal{Z} \text{ s.t. } \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c \right\} \mid }{\mid \mathcal{Z} \mid} $$
+$$\small \Phi_t^i = \frac{ \mid \left\{ \boldsymbol{z}_i \in \mathcal{Z} : \exists \boldsymbol{z}_j \in \mathcal{Z} \text{ s.t. } \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c \right\} \mid }{\mid \mathcal{Z} \mid} $$
 	
 %	\item[$\Phi_i$] [individual comprehensive fairness, cf.\ ] ratio of individuals whose counterfactual changes at least one sensitive attribute or for which exists at least one similar individual receiving a different counterfactual over all the individuals of the domain:
 %	%
 %	$$\Phi_i = \frac{ \mid \left\{ \boldsymbol{z}_i \in \mathcal{Z} : \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \vee  \exists \boldsymbol{z}_j \in \mathcal{Z} \text{ s.t. } \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c \right\} \mid }{\mid \mathcal{Z} \mid} $$
 	
-\paragraph{$\Phi_g^b$} [group explicit bias, cf.\ \Cref{explicit_bias_group}] difference between the maximum and minimum ratios of explicit biases calculated for all the represented groups, denoted by $\boldsymbol{s}$ values:
+\paragraph{$\Phi_b^g$} [group explicit bias, cf.\ \Cref{explicit_bias_group}] difference between the maximum and minimum ratios of explicit biases $\phi_b^{\boldsymbol{s}}$, calculated for all the represented groups denoted by $\boldsymbol{s}$ values:
 %
 %$$\small \phi^b = \left\{ \frac{ | \left\{ \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \right\} | }{\mid \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \mid} : \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \text{\normalsize ~is a group} \right\}$$
-$$\phi^b = \underset{\boldsymbol{s}}{\bigcup} \left\{ \frac{ | \left\{ \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \right\} | }{\mid \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \mid} \right\}$$
+$$\phi_b^{\boldsymbol{s}} = \frac{ | \left\{ \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \right\} | }{\mid \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \mid}$$
 %
-$$\Phi_g^b = \max \left\{ \phi^b \right\} - \min \left\{ \phi^b \right\} $$
+$$\Phi_b^g = \underset{\boldsymbol{s}}{\max} \left\{ \phi_b^{\boldsymbol{s}} \right\} - \underset{\boldsymbol{s}}{\min} \left\{ \phi_b^{\boldsymbol{s}} \right\} $$
 	
-\paragraph{$\Phi_g^t$} [group unequal treatment, cf.\ \Cref{unequal_treatment_group}] maximum ratio of unequal treatment calculated for all the represented groups, denoted by $\boldsymbol{s}$ values:
+\paragraph{$\Phi_t^g$} [group unequal treatment, cf.\ \Cref{unequal_treatment_group}] maximum ratio of unequal treatment $\phi_t^{\boldsymbol{s}, \boldsymbol{s}'}$, calculated for all pairs of the represented groups denoted by $\boldsymbol{s}$ and $\boldsymbol{s}'$ values:
 %
 %$$\small \phi^t = \left\{ \frac{ \splitfrac{| \{ \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : \exists \boldsymbol{z}_j \in \mathcal{Z} \setminus \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}}{\text{s.t. } \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c \} |}}{\mid \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \mid} : \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \text{is a group} \right\} $$
-$$\phi^t = \underset{\boldsymbol{s}}{\bigcup} \left\{ \frac{ \splitfrac{\mid \{ \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : \exists \boldsymbol{z}_j \in \mathcal{Z} \setminus \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}}{\text{s.t. } \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c \} \mid}}{\mid \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \mid}\right\} $$
+$$\phi_t^{\boldsymbol{s}, \boldsymbol{s}'} = \frac{ \splitfrac{\mid \{ \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : \exists \boldsymbol{z}_j \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'}}{\text{s.t. } \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c \} \mid}}{\mid \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \mid}$$
 %
-$$\Phi_g^t = \max \left\{ \phi^t \right\}$$
+$$\Phi_t^g = \underset{\boldsymbol{s}, \boldsymbol{s}' : ~ \boldsymbol{s} \neq \boldsymbol{s}'}{\max} \left\{ \phi_t^{\boldsymbol{s}, \boldsymbol{s}'} \right\}$$
 
 \noindent Comprehensive fairness metrics descending from \Cref{comprehensive,comprehensive_group} can be easily obtained by merging the numerators in the above formulations.
 
@@ -652,6 +652,8 @@ Future works will be devoted to more extensive experimentation, involving data f
 
 The limitations of the paper are related with the future directions needed in the field of trustworthy ML. Associated with the explanations, there is a lack of verification on whether an explanation is correct and complete. 
 Moreover, the software currently available for computing counterfactual explanations for data sets with numerous input features and a huge number of individuals have still a considerable computational cost.
+
+\textbf{future: cf simili per individui simili, in proporzione. rappresentanti per gruppi}
 
 \section{Acknowledgments}
 
