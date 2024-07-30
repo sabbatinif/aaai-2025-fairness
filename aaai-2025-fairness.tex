@@ -248,6 +248,7 @@ Let $\boldsymbol{z}_i^c = (\boldsymbol{x}_i^c, \boldsymbol{a}_i^c) \in \mathcal{
 
 The definition of \emph{minimal difference} depends on the problem domain and corresponding features. Generally, this concept refers to making the smallest possible changes to the original, factual instance to receive a different outcome. Therefore, counterfactuals provide insights into how small input perturbations lead to different predictions. From the fairness assessment standpoint, the notion of minimal difference should only consider non-protected attributes, e.g., the dissimilarity between two individuals should only be based on their skills and abilities and not on their ethnicity and gender.
 
+
 %\begin{definition}[Counterfactual instance: distance function and minimality] 
 %	Let $\boldsymbol{z} \in Z$ be the original instance, and $\boldsymbol{z}^{c}$ be the counterfactual instance. Let $d: Z \times Z \rightarrow \mathbb{R}^{+}$ be a distance function defined in the feature space and representing the dissimilarity between instances.
 %	The minimally different condition can be expressed by minimizing $d (\boldsymbol{z}, \boldsymbol{z}^{c})$ subject to certain constraints (such as bounds on feature changes, ensuring that changes do not violate domain-specific rules or regulations, or preserving certain key characteristics of the original instance). 
@@ -298,9 +299,11 @@ This definition implies a different notion of fairness, ensuring that a predicto
 
 Returning to the motivating example, individual fairness via explicit bias in the counterfactuals ensures that John can obtain the loan without altering any of his sensitive attributes, e.g., he is not required to change his gender to female.
 %
-Differently, the assessment of individual fairness through the analysis of unequal treatment ensures that the loan is granted to both John and Mary under the same conditions, e.g., if they are able to increase in their income. For instance, it ensures that John is not asked to increase his income while Mary is also required to have an additional qualification.
+Differently, the assessment of individual fairness through the analysis of unequal treatment ensures that the loan is granted to both John and Mary under the same conditions, e.g., if they are able to increase their income. For instance, it ensures that John is not asked to increase his income while Mary is also required to have an additional qualification.
 %
-The assessment of unequal treatment should be conducted for all individuals who are similar to John and receive his same outcome, regardless of their sensitive attributes.
+The assessment of unequal treatment should be conducted for all individuals who are similar to John and receive the same outcome, regardless of their sensitive attributes.
+
+%RC comment: secondo me questo va prima perchè lo usi già nella def2 e secondo me nella definizione di siilarity non devi considerare l'outcome. loro sono simili a prescindere. Poi se fai counterfactual ti concentri su stesso outcome per verificare se hanno un trattamento diverso. Io introdurrei la similarity prima, fuori dal paragrafo su individual
 
 In the context of fairness measurement through counterfactual explanations, a formal definition of \emph{individual similarity} ($\sim$) is still missing in the literature. We propose the following to fill this gap.
 %
