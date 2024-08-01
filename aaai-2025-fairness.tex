@@ -170,7 +170,7 @@ An explicit bias is thus highlighted if counterfactuals involve protected/sensit
 %
 Second, we introduce a stronger formulation of fairness, ensuring equal treatment for decision reversals.
 %
-An unequal treatment is therefore revealed if counterfactuals for similar individuals (i.e., equally qualified) are not identical, meaning that similar individuals are required to accomplish different actions to obtain a decision reversal.
+An unequal treatment is therefore revealed if counterfactuals for similar individuals (i.e., equally qualified) that receive the same outcomes are not identical, meaning that similar individuals are required to accomplish different actions to obtain a decision reversal.
 %
 Finally, we propose computationally feasible fairness metrics based on these definitions.
 
@@ -235,7 +235,7 @@ Let $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i) \in \mathcal{Z}$ re
 %
 Let $\hat{Y}$ denote a predictive function such that $\hat{Y}(\boldsymbol{x}_i, \boldsymbol{a}_i) = \hat{y}_i$, being $\hat{y}_i$ the prediction for instance $\boldsymbol{z}_i$.
 
-Let $\mathcal{Z}^{a_1=k_1,\dots,a_m=k_m}$ be the subset of domain $\mathcal{Z}$ where individuals belong to the protected group defined by the values $k_1,\dots,k_m$ of protected attributes $a_1,\dots,a_m$, e.g., $\mathcal{Z}^{gender=female}$.
+Let $\mathcal{Z}^{\boldsymbol{s}}_o$ be the subset of domain $\mathcal{Z}$ where individuals belong to the protected group defined by $\boldsymbol{s}$ and receiving outcome $o$. In other words, the sensitive attributes $\boldsymbol{a}_i$ assume the values $\boldsymbol{s}$, e.g., $\mathcal{Z}^{female}_1, \mathcal{Z}^{male}_1$ if gender is the only protected attribute and we want to consider gender-based groups receiving positive outcome.
 %
 %Let $\mathcal{Z}_\mathbb{0}$ and $\mathcal{Z}_\mathbb{1}$ represent the subsets of domain $\mathcal{Z}$ where the outcome provided by $\hat{Y}$ is negative and positive, respectively. We denote with $\mathcal{Z}_\star$ any of $\mathcal{Z}_\mathbb{0}$ and $\mathcal{Z}_\mathbb{1}$ when a definition apply to both of them.
 
@@ -271,7 +271,36 @@ The definition of \emph{minimal difference} depends on the problem domain and co
 %\end{definition}
 %%
 %%\noindent Note that most of the implemented counterfactual explainers are designed to return only a single vector, denoted as $f_{e}^{1}$. 
-%\noindent An explainer designed to return only a single vector (as mostly implemented in the current literature) is denoted as $f_{e}^{1}$. 
+%\noindent An explainer designed to return only a single vector (as mostly implemented in the current literature) is denoted as $f_{e}^{1}$.
+
+\paragraph{On similarity assessment}
+
+In the context of fairness measurement through counterfactual explanations, a formal definition of \emph{individual similarity} ($\sim$) is still missing in the literature. We propose the following to fill this gap.
+%
+\begin{definition}[Threshold-based similarity $\sim_\varepsilon$]\label{similar_individuals}
+	Let $d: \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}^{+}$ be a distance function defined in the feature domain, representing the dissimilarity between two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$.
+	$\boldsymbol{z}_i$ and $\boldsymbol{z}_j$ are similar if the distance between their non-protected attribute values is smaller than a predefined threshold $\varepsilon$:
+	$$ \boldsymbol{z}_i \sim_\varepsilon \boldsymbol{z}_j \iff d(\boldsymbol{x}_i, \boldsymbol{x}_j) < \varepsilon. $$
+\end{definition}
+%
+\noindent This definition implies that two individuals can be considered similar if they are ``close enough'' in the input space, regardless of their sensitive features. This aligns with fairness principles, as sensitive features should not influence the determination of similarity between two individuals who should be treated equally by automated decision-making systems.
+%
+The determination of the $\varepsilon$ threshold and the selection of the proper $d$ function should consider the specific task requirements, data peculiarities and problem domain. Common distance metrics include Euclidean and Manhattan distances and cosine similarity, amongst others.
+
+Inspired to the concept of \emph{consistency} introduced by \textbf{cite Zemel+ 2013}, it is possible to define a neighbourhood-based similarity as follows.
+%RC comment: la cosa degli outliers che ti ho detto nel messaggio vocale va secondo me detta. punto di forza per la fairness.
+%
+\begin{definition}[Neighbourhood-based similarity $\sim_k$]\label{similar_individuals_neigh}
+	Let $d: \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}^{+}$ be a distance function defined in the feature domain, representing the dissimilarity between two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$.
+	The $k$-neighbourhood of $\boldsymbol{z}_i$, denoted as $\mathcal{K}^{\boldsymbol{z}_i}$, contains the $k$ individuals $\boldsymbol{z}_j$ minimising the distance from the non-protected attribute values of $\boldsymbol{z}_i$:
+	$$ \boldsymbol{z}_i \sim_k \boldsymbol{z}_j \iff \boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i}, $$
+	where
+	$$\mathcal{K}^{\boldsymbol{z}_i} \subseteq \mathcal{Z} : ~ | \mathcal{K}^{\boldsymbol{z}_i} | = k,$$
+	%$$\hat{y}_j = \hat{y}_i, ~ \forall \boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i},$$
+	$$d(\boldsymbol{x}_i, \boldsymbol{x}_k) \geq \underset{\boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i}}{\max} d(\boldsymbol{x}_i, \boldsymbol{x}_j), ~ \forall \boldsymbol{z}_k \in \mathcal{Z} \setminus \mathcal{K}^{\boldsymbol{z}_i}$$ % : ~ \hat{y}_k = \hat{y}_i.$$
+\end{definition}
+%
+\noindent In other words, all individuals outside the $k$-neighbourhood of $\boldsymbol{z}_i$ have larger distance from $\boldsymbol{z}_i$ than any of the $k$ individuals inside its $k$-neighbourhood and the sensitive attributes are not taken into account in the distance determination.
 
 %--------------------------------------------------------------------
 \subsection{Individual Fairness Based on Counterfactuals}
@@ -305,58 +334,33 @@ The assessment of unequal treatment should be conducted for all individuals who 
 
 %RC comment: secondo me questo va prima perchè lo usi già nella def2 e secondo me nella definizione di siilarity non devi considerare l'outcome. loro sono simili a prescindere. Poi se fai counterfactual ti concentri su stesso outcome per verificare se hanno un trattamento diverso. Io introdurrei la similarity prima, fuori dal paragrafo su individual
 
-In the context of fairness measurement through counterfactual explanations, a formal definition of \emph{individual similarity} ($\sim$) is still missing in the literature. We propose the following to fill this gap.
-%
-\begin{definition}[Threshold-based similarity]\label{similar_individuals}
-	Let $d: \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}^{+}$ be a distance function defined in the feature domain, representing the dissimilarity between two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$.
-	$\boldsymbol{z}_i$ and $\boldsymbol{z}_j$ are similar if their outcomes $\hat{y}_i$ and $\hat{y}_j$ are the same and the distance between their non-protected attribute values is smaller than a predefined threshold $\varepsilon$:
-	$$ \boldsymbol{z}_i \sim_\varepsilon \boldsymbol{z}_j \iff \hat{y}_i = \hat{y}_j \wedge d(\boldsymbol{x}_i, \boldsymbol{x}_j) < \varepsilon. $$
-\end{definition}
-%
-\noindent This definition implies that two individuals can be considered similar if they are ``close enough'' in the input space, regardless of their sensitive features. This aligns with fairness principles, as sensitive features should not influence the determination of similarity between two individuals who should be treated equally by automated decision-making systems.
-%
-The determination of the $\varepsilon$ threshold and the selection of the proper $d$ function should consider the specific task requirements, data peculiarities and problem domain. Common distance metrics include Euclidean and Manhattan distances and cosine similarity, amongst others.
-
-Inspired to the concept of \emph{consistency} introduced by \textbf{cite Zemel+ 2013}, it is possible to define a neighbourhood-based similarity as follows.
-%RC comment: la cosa degli outliers che ti ho detto nel messaggio vocale va secondo me detta. punto di forza per la fairness.
-%
-\begin{definition}[Neighbourhood-based similarity]\label{similar_individuals_neigh}
-	Let $d: \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}^{+}$ be a distance function defined in the feature domain, representing the dissimilarity between two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with outcome $\hat{y}_i$ and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$ with outcome $\hat{y}_j$.
-	The $k$-neighbourhood of $\boldsymbol{z}_i$, denoted as $\mathcal{K}^{\boldsymbol{z}_i}$, contains the $k$ individuals $\boldsymbol{z}_j$ having the same outcome of $\boldsymbol{z}_i$ and minimising the distance from the non-protected attribute values of $\boldsymbol{z}_i$:
-	$$ \boldsymbol{z}_i \sim_k \boldsymbol{z}_j \iff \boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i}, $$
-	where
-	$$\mathcal{K}^{\boldsymbol{z}_i} \subseteq \mathcal{Z} : ~ | \mathcal{K}^{\boldsymbol{z}_i} | = k,$$
-	$$\hat{y}_j = \hat{y}_i, ~ \forall \boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i},$$
-	$$d(\boldsymbol{x}_i, \boldsymbol{x}_k) \geq \underset{\boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i}}{\max} d(\boldsymbol{x}_i, \boldsymbol{x}_j), ~ \forall \boldsymbol{z}_k \in \mathcal{Z} \setminus \mathcal{K}^{\boldsymbol{z}_i} : ~ \hat{y}_k = \hat{y}_i.$$
-\end{definition}
-%
-\noindent In other words, all individuals outside the $k$-neighbourhood of $\boldsymbol{z}_i$ have larger distance from $\boldsymbol{z}_i$ than any of the $k$ individuals inside its $k$-neighbourhood, all individuals in the neighbourhood share the same outcome and the sensitive attributes are not taken into account in the distance determination.
-
 Finally, we present the definition of \emph{comprehensive individual fairness} by merging \Cref{explicit_bias,unequal_treatment}, as follows.
 %
 \begin{definition}[Individual comprehensive fairness]\label{comprehensive}
-	A decision system based on the predictive function $\hat{Y}$ is \emph{comprehensively individual-fair} if its outcomes are explicitly unbiased and exhibit equal treatment for similar individuals, i.e., $\boldsymbol{a}_i = \boldsymbol{a}_i^c \wedge \boldsymbol{z}_i^c = \boldsymbol{z}_j^c, \forall \boldsymbol{z}_i, \boldsymbol{z}_j \in \mathcal{Z} : ~ \boldsymbol{z}_i \sim \boldsymbol{z}_j$.
+	A decision system based on the predictive function $\hat{Y}$ is \emph{comprehensively individual-fair} if its outcomes are explicitly unbiased and exhibit equal treatment for similar individuals, i.e., $\boldsymbol{a}_i = \boldsymbol{a}_i^c \wedge \boldsymbol{z}_i^c = \boldsymbol{z}_j^c, \forall \boldsymbol{z}_i, \boldsymbol{z}_j \in \mathcal{Z} : ~ \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j $.
 \end{definition}
 
 \subsection{Group Fairness Based on Counterfactuals}
 
 \Cref{explicit_bias,unequal_treatment} can be extended to carry out group fairness evaluations based on counterfactuals.
 
-We define the concept of explicit bias for a group identified by the values $\boldsymbol{s}$ of the protected attributes by checking whether the explicit bias for individuals belonging to a specific group is different than the bias for individuals within a different group.
+We define the concept of explicit bias for a group identified by the values $\boldsymbol{s}$ of the protected attributes by checking whether the explicit bias for individuals belonging to a specific group is different with respect to the bias for individuals within a different group.
 %
 The notion of individual bias is the same given in \Cref{explicit_bias}.
 %
 \begin{definition}[Group fairness: explicit bias]\label{explicit_bias_group}
-	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ for the individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with non-protected attribute values $\boldsymbol{x}_{i}$ and protected attribute values $\boldsymbol{a}_{i}$ belonging to the domain $\mathcal{Z}$ is \emph{explicitly biased} if the counterfactuals $\boldsymbol{z}_i^c = (\boldsymbol{x}_i^c, \boldsymbol{a}_i^c)$ for factual individuals belonging to the group $\mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}$ have a different probability to contain different values for some sensitive variables of $\boldsymbol{z}_i$ with respect to the counterfactuals for individuals of another group $\mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'}$, i.e., if $\exists \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}, \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'} \subseteq \mathcal{Z} : ~ \boldsymbol{s} \neq \boldsymbol{s}' \wedge \mathbb{P}(\boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \mid \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}) \neq \mathbb{P}(\boldsymbol{a}_{j} \neq \boldsymbol{a}_{j}^{c} \mid \boldsymbol{z}_j \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'})$.
+	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ for the individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with non-protected attribute values $\boldsymbol{x}_{i}$ and protected attribute values $\boldsymbol{a}_{i}$ belonging to the domain $\mathcal{Z}$ is \emph{explicitly biased} if the counterfactuals $\boldsymbol{z}_i^c = (\boldsymbol{x}_i^c, \boldsymbol{a}_i^c)$ for factual individuals belonging to the group $\mathcal{Z}^{\boldsymbol{s}}_o$ have a different probability to contain different values for some sensitive variables of $\boldsymbol{z}_i$ with respect to the counterfactuals for individuals of another group $\mathcal{Z}^{\boldsymbol{s}'}_o$, i.e., if $\exists \mathcal{Z}^{\boldsymbol{s}}_o, \mathcal{Z}^{\boldsymbol{s}'}_o \subseteq \mathcal{Z} : ~ \boldsymbol{s} \neq \boldsymbol{s}' \wedge \mathbb{P}(\boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \mid \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{s}}_o) \neq \mathbb{P}(\boldsymbol{a}_{j} \neq \boldsymbol{a}_{j}^{c} \mid \boldsymbol{z}_j \in \mathcal{Z}^{\boldsymbol{s}'}_o)$.
 \end{definition}
 
-The notion of unequal treatment for a group identified by the values $\boldsymbol{s}$ of the protected attributes is formalised by comparing the counterfactual explanations for the individuals in the protected group with those generated for similar individuals belonging to the other groups who received the same outcomes.
+The notion of unequal treatment for a group identified by the values $\boldsymbol{s}$ of the protected attributes and outcome $o$ is formalised by comparing the counterfactual explanations for the individuals in the protected group with those generated for similar individuals belonging to the other groups who received the same outcomes.
 %
 Unequal treatment is detected when such pairs of similar individuals receive different counterfactuals.
 %
 \begin{definition}[Group fairness: unequal treatment]\label{unequal_treatment_group}
-	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ is responsible of \emph{unequal treatment} with respect to group $\mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}$ if for an individual $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ belonging to that group, with non-protected attribute values $\boldsymbol{x}_i$ and protected attribute values $\boldsymbol{a}_i$, it is possible to find a similar individual belonging to a different group $\mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'}$, who receives the same outcome but a different counterfactual, i.e., if $\exists \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}, \boldsymbol{z}_j \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'} : ~ \boldsymbol{s} \neq \boldsymbol{s}' \wedge \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c$.
+	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ is responsible of \emph{unequal treatment} with respect to group $\mathcal{Z}^{\boldsymbol{s}}_o$ if for an individual $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ belonging to that group, with non-protected attribute values $\boldsymbol{x}_i$ and protected attribute values $\boldsymbol{a}_i$, it is possible to find a similar individual belonging to a different group $\mathcal{Z}^{\boldsymbol{s}'}_o$, who receives the same outcome but a different counterfactual, i.e., if $\exists \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{s}}_o, \boldsymbol{z}_j \in \mathcal{Z}^{\boldsymbol{s}'}_o : ~ \boldsymbol{s} \neq \boldsymbol{s}' \wedge \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j = o \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c$.
 \end{definition}
+%
+\textbf{vogliamo togliere $\hat{y}_i = \hat{y}_j = o $ dalla def, visto che è implicito nella nuova definizione di $\mathcal{Z}^s_o$?}
 
 With reference to the aforementioned motivating example, counterfactual group fairness via explicit bias ensures that the individual bias for female applicants (e.g., Mary) is not stronger than the bias for male applicants (e.g., John). This is not equivalent to an absolute absence of individual bias, but it highlights that the predictive system is not making decisions to penalise a specific group.
 %
@@ -365,8 +369,10 @@ On the other hand, by assessing group fairness through unequal treatment it is p
 The notions formalised in \Cref{explicit_bias_group,unequal_treatment_group} can be merged in a stricter concept of \emph{comprehensive group fairness}, as follows.
 %
 \begin{definition}[Group comprehensive fairness]\label{comprehensive_group}
-	A decision system based on the predictive function $\hat{Y}$ is \emph{comprehensively group-fair} if the explicit bias of its outcomes is homogeneous across the represented groups and if it exhibits equal treatment for similar individuals belonging to different groups, i.e., $\mathbb{P}(\boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c}) = \mathbb{P}(\boldsymbol{a}_{j} \neq \boldsymbol{a}_{j}^{c}) \wedge \boldsymbol{z}_i^c = \boldsymbol{z}_l^c, ~ \forall \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}, \boldsymbol{z}_j, \boldsymbol{z}_l \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'} : ~ \boldsymbol{s} \neq \boldsymbol{s}' \wedge \boldsymbol{z}_i \sim \boldsymbol{z}_l$.
+	A decision system based on the predictive function $\hat{Y}$ is \emph{comprehensively group-fair} if the explicit bias of its outcomes is homogeneous across the represented groups and if it exhibits equal treatment for similar individuals belonging to different groups, i.e., $\mathbb{P}(\boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c}) = \mathbb{P}(\boldsymbol{a}_{j} \neq \boldsymbol{a}_{j}^{c}) \wedge \boldsymbol{z}_i^c = \boldsymbol{z}_l^c, ~ \forall \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{s}}_o, \boldsymbol{z}_j, \boldsymbol{z}_l \in \mathcal{Z}^{\boldsymbol{s}'}_o : ~ \boldsymbol{s} \neq \boldsymbol{s}' \wedge \boldsymbol{z}_i \sim \boldsymbol{z}_l \wedge \hat{y}_i = \hat{y}_j = \hat{y}_l = o$.
 \end{definition}
+%
+\textbf{anche qua, vogliamo togliere $\wedge \hat{y}_i = \hat{y}_j = \hat{y}_l = o$?}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Fairness Metrics Based on Counterfactuals}
@@ -388,19 +394,20 @@ $$\small \Phi_t^i = \frac{ \mid \left\{ \boldsymbol{z}_i \in \mathcal{Z} : \exis
 %	%
 %	$$\Phi_i = \frac{ \mid \left\{ \boldsymbol{z}_i \in \mathcal{Z} : \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \vee  \exists \boldsymbol{z}_j \in \mathcal{Z} \text{ s.t. } \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c \right\} \mid }{\mid \mathcal{Z} \mid} $$
 	
-\paragraph{$\Phi_b^g$} [group explicit bias, cf.\ \Cref{explicit_bias_group}] difference between the maximum and minimum ratios of explicit biases $\phi_b^{\boldsymbol{s}}$, calculated for all the represented groups denoted by $\boldsymbol{s}$ values:
+\paragraph{$\Phi_b^g$} [group explicit bias, cf.\ \Cref{explicit_bias_group}] difference between the maximum and minimum ratios of explicit biases $\phi_b^{\boldsymbol{s},o}$, calculated for all the represented groups denoted by $\boldsymbol{s}$ values and $o$ outcomes:
 %
 %$$\small \phi^b = \left\{ \frac{ | \left\{ \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \right\} | }{\mid \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \mid} : \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \text{\normalsize ~is a group} \right\}$$
-$$\phi_b^{\boldsymbol{s}} = \frac{ | \left\{ \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \right\} | }{\mid \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \mid}$$
+$$\phi_b^{\boldsymbol{s},o} = \frac{ | \left\{ \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{s}}_o : \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c} \right\} | }{\mid \mathcal{Z}^{\boldsymbol{s}}_o \mid}$$
 %
-$$\Phi_b^g = \underset{\boldsymbol{s}}{\max} \left\{ \phi_b^{\boldsymbol{s}} \right\} - \underset{\boldsymbol{s}}{\min} \left\{ \phi_b^{\boldsymbol{s}} \right\} $$
+$$\Phi_b^g = \underset{\boldsymbol{s},o}{\max} \left\{ \phi_b^{\boldsymbol{s},o} \right\} - \underset{\boldsymbol{s},o}{\min} \left\{ \phi_b^{\boldsymbol{s},o} \right\} $$
 	
-\paragraph{$\Phi_t^g$} [group unequal treatment, cf.\ \Cref{unequal_treatment_group}] maximum ratio of unequal treatment $\phi_t^{\boldsymbol{s}, \boldsymbol{s}'}$, calculated for all pairs of the represented groups denoted by $\boldsymbol{s}$ and $\boldsymbol{s}'$ values:
+\paragraph{$\Phi_t^g$} [group unequal treatment, cf.\ \Cref{unequal_treatment_group}] maximum ratio of unequal treatment $\phi_t^{\boldsymbol{s}, \boldsymbol{s}',o}$, calculated for all pairs of the represented groups denoted by $\boldsymbol{s}$ and $\boldsymbol{s}'$ values and $o$ outcomes:
 %
 %$$\small \phi^t = \left\{ \frac{ \splitfrac{| \{ \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : \exists \boldsymbol{z}_j \in \mathcal{Z} \setminus \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}}}{\text{s.t. } \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c \} |}}{\mid \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \mid} : \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \text{is a group} \right\} $$
-$$\phi_t^{\boldsymbol{s}, \boldsymbol{s}'} = \frac{ \splitfrac{\mid \{ \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} : \exists \boldsymbol{z}_j \in \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}'}}{\text{s.t. } \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c \} \mid}}{\mid \mathcal{Z}^{\boldsymbol{a}=\boldsymbol{s}} \mid}$$
+%$$\phi_t^{\boldsymbol{s}, \boldsymbol{s}', o} = \frac{ \splitfrac{\mid \{ \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{s}}_o : \exists \boldsymbol{z}_j \in \mathcal{Z}^{\boldsymbol{s}'}_o}{\text{s.t. } \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c \} \mid}}{\mid \mathcal{Z}^{\boldsymbol{s}}_o \mid}$$
+$$\phi_t^{\boldsymbol{s}, \boldsymbol{s}', o} = \frac{\mid \{ \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{s}}_o : \exists \boldsymbol{z}_j \in \mathcal{Z}^{\boldsymbol{s}'}_o\text{s.t. } \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c \} \mid}{\mid \mathcal{Z}^{\boldsymbol{s}}_o \mid}$$
 %
-$$\Phi_t^g = \underset{\boldsymbol{s}, \boldsymbol{s}' : ~ \boldsymbol{s} \neq \boldsymbol{s}'}{\max} \left\{ \phi_t^{\boldsymbol{s}, \boldsymbol{s}'} \right\}$$
+$$\Phi_t^g = \underset{\boldsymbol{s}, \boldsymbol{s}', o : ~ \boldsymbol{s} \neq \boldsymbol{s}'}{\max} \left\{ \phi_t^{\boldsymbol{s}, \boldsymbol{s}', o} \right\}$$
 
 \noindent Comprehensive fairness metrics descending from \Cref{comprehensive,comprehensive_group} can be easily obtained by merging the numerators in the above formulations.
 
