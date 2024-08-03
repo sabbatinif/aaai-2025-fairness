@@ -1,6 +1,8 @@
 .vscode
 .DS_Store
 aaai-2025-fairness.pdf
+exp
+exp/*
 *.drawio.bkp
 
 *.synctex.gz
