@@ -393,6 +393,7 @@ Therefore, it has gained significant popularity within the algorithmic fairness 
 % Our fairness experiments employ a set of opaque classifiers trained on the Adult Income data set, i.e., a gradient boosting (GB), a K-nearest neighbor (KNN) and a support vector machine (SVM) whose hyper-parameters are resumed in \Cref{tab:bb}.
 
 \begin{table}[t!]
+\scriptsize{
 	\begin{center}{\caption{Performance of the black-box (BB) predictors employed in our experiments. The fidelity achieved by the knowledge extractors applied to the BBs is also reported. Average values over 10 runs are reported.}\label{tab:bb}}
 		\begin{tabular}{lll}
 			\toprule
@@ -406,11 +407,12 @@ Therefore, it has gained significant popularity within the algorithmic fairness 
 			\bottomrule
 		\end{tabular}
 	\end{center}
+}
 \end{table}
 
 \paragraph{Data preparation and model training}
 
-Our experiments employ a set of opaque classifiers trained on the Adult Income data set, i.e., a gradient boosting (GB), a K-nearest neighbour (KNN) and a support vector machine (SVM). 
+Our experiments employ a set of opaque classifiers trained on the Adult Income data set: a gradient boosting (GB), a K-nearest neighbour (KNN) and a support vector machine (SVM). 
 %
 The GB adopted 200 base estimators and a learning rate of 0.2.
 %
@@ -418,18 +420,18 @@ The KNN had a K parameter equal to 150 and used Euclidean distance and uniform w
 %
 The SVM employed a radial basis function kernel with regularisation parameter of 0.85.
 %
-It is important to note that the chosen classifiers do not incorporate any algorithmic fairness constraints throughout their training process.
-
-A pre-processing of the Adult Income data set has been performed, consisting of a mapping of categoric features into numeric ones followed by a normalisation of all inputs, given that the variables range in very different domains.
-
+It is worth noting that the chosen classifiers do not incorporate any algorithmic fairness constraints in their training process.
+%
+A pre-processing of the data set has been performed, consisting of a mapping of categoric features into numeric ones followed by a normalisation of all inputs, given that the variables range in very different domains.
+%
 In detail, categorical features for sex and race were converted into integer values between 0 and 1 or 4, respectively. All features were then standardised to have a mean of 0 and a variance of 1.
-
+%
 The resulting data set was split into training and test sets with a 50\%:50\% ratio.
-
+%
 The training set was used for hyperparameter tuning of the black-box classifiers via a grid search with 3-fold cross-validation.
-
+%
 After tuning, the classifiers, parameterized with the best-found values, were trained on the entire training set.
-
+%
 The resulting accuracy scores were consistent with the baseline performance established by the Adult data set benchmarks (see \Cref{tab:bb}).
 
 \paragraph{Counterfactual generation via knowledge extraction}
@@ -453,6 +455,7 @@ The result of the knowledge-extraction process is a set of symbolic rules expres
 An example is shown in \Cref{lst:rules}.
 
 \begin{table*}[t!]
+\scriptsize{
 	\begin{center}{\caption{Fairness assessment results. $f$ and $m$ denote individual groups based on female and male sex, respectively. $+$ and $-$ denote positive and negative outcomes, respectively.}\label{tab:res}}
 		\begin{tabular}{ll|c|c|c}
 			\toprule
@@ -479,10 +482,11 @@ An example is shown in \Cref{lst:rules}.
 			\bottomrule
 		\end{tabular}
 	\end{center}
+}
 \end{table*}
 
 \begin{listing*}[t!]
-	\caption{Example of knowledge extracted with GridEx for the Adult Income data set. The knowledge is expressed as a Prolog theory.}\label{lst:rules}
+	\caption{Example of knowledge extracted with GridEx for the Adult Income data set. Knowledge expressed as a Prolog theory.}\label{lst:rules}
 	\begin{lstlisting}[]
 income(Age, CapitalGain, CapitalLoss, EducationNum, Fnlwgt, HoursPerWeek, Race, Sex, '>50K') 
     :- EducationNum > 11, Sex = 'Male', CapitalGain =< 33332.
@@ -511,69 +515,69 @@ In general, GridEx may serve as a stable and efficient counterfactual explainer.
 %
 It is important to note that fairness is not guaranteed by the design in GridEx; rather, it reflects the same level of fairness as the black-box classifier it explains. Therefore, GridEx can be used as a tool to assess the fairness extent of its underlying opaque predictors.
 
-\paragraph{Analysis of the results}
-
-The experiments conducted in this study consider sex and race as sensitive attributes, as described in the Adult Income data set.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Discussion adn Conclusions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+The experiments conducted in this study consider sex and race as sensitive attributes, as described in the Adult Income dataset. However, since race does not significantly influence the counterfactuals or the classification process (we observed no differences based on racial subgroups), the results in the table refer only to gender and are not grouped based on race. These findings can also be verified by analyzing \Cref{lst:rules}. The first two rules highlight that female and male individuals with the same characteristics (education and income) receive different outcomes based on their sex, while race is never considered in determining the outcome.
 %
 All results were averaged over 10 runs, each with different train/test splits and, consequently, different black-box model training.
 %
 As a result, the corresponding extraction techniques were also trained each time with a different set of instances.
 %
-Comprehensive results of our experiments are summarized in  \Cref{tab:res}.
-%
-Results are not grouped based on race, as this attribute does not significantly influence the counterfactuals or the classification process; thus, we observed no differences based on racial subgroups.
-%
-Conversely, the sex attribute plays a crucial role in this case study and is an important feature for detecting bias.
-%
-These findings can be verified by analysing \Cref{lst:rules}. The first two rules highlight that female and male individuals with the same characteristics (education and income) receive different outcomes based on their sex.
-%
-Furthermore, race is never considered in determining the outcome.
+Comprehensive results of our experiments are summarized in \Cref{tab:res}.
 
-\Cref{tab:res} compares fairness measurements carried out with our proposed metrics and with state-of-the-art fairness scores, namely fairness through awareness \cite{10.1145/2090236.2090255}, quantifying pairs of similar individuals receiving the same classification, counterfactual fairness \cite{NIPS2017_a486cd07}, indicating if individuals receive the same outcome after having changed their sensitive attributes, and disparate impact \cite{FeldmanFMSV15}, representing the proportion of positive classifications across groups.
-
-From the fairness measurements, it is notable that the results for the KNN are generally less stable (higher standard deviation) than those obtained for the GB and SVM models, yet still aligned with their measurements.
+\paragraph{Individual fairness results}
+The results of our experiments were compared with two widely used state-of-the-art metrics for individual fairness, namely fairness through awareness \cite{10.1145/2090236.2090255}, which quantifies pairs of similar individuals receiving the same classification, and counterfactual fairness \cite{NIPS2017_a486cd07}, which indicates if individuals receive the same outcome after changing their sensitive attributes.
 %
-Overall, state-of-the-art metrics suggest that all classifiers exhibit a fairness extent around 90\%, both considering fairness through awareness and counterfactual fairness.
+From the fairness measurements, it is notable that the results for KNN are generally less stable (higher standard deviation) than those obtained for the GB and SVM models, yet still aligned with their measurements.
+%
+Overall, state-of-the-art metrics suggest that all classifiers exhibit a fairness extent around 90\%, considering both fairness through awareness and counterfactual fairness.
 %
 According to our metrics, the individual explicit bias is around 30\% for all models, whereas the individual unequal treatment is around 40\%.
 %
-This means that one individual out of three receives a counterfactual based on protected features, while two individuals out of five receive a different counterfactual with respect to similar individuals receiving the same outcome.
+This means that one individual out of three receives a counterfactual based on protected features, while two individuals out of five receive a different counterfactual compared to similar individuals receiving the same outcome.
 %
-In other words, even if individuals receive the same outcome of their other similar individuals and even if swapping their sensitive attributes is not sufficient to change their decisions, one individual out of three is required to change sex (possibly amongst other features) to have a decision reversal and two individuals out of five can obtain it by fulfilling different conditions with respect to similar individuals.
+In other words, one individual out of three is required to change sex (possibly among other features) to have a decision reversal, and two individuals out of five are treated differently depending on gender and can obtain a decision swap by fulfilling different conditions compared to similar individuals.
 %
-With reference to the running example, John and Mary are similar and both did not receive the loan (fairness through awareness is thus ensured). Mary is not able to obtain it even if she was able to change her sex to male (counterfactual fairness is ensured). John can have the loan by increasing his income. However, Mary is required to increase her income \emph{and} change her sex to male. This condition represents an explicit bias and an unequal treatment with respect to a similar individual.
+With reference to the running example, John and Mary are similar (in terms of socio-economic status) and both did not receive the loan (thus fairness through awareness is ensured). Mary is not able to obtain it even if she changes her sex to male (counterfactual fairness is ensured). John can get the loan by increasing his income. However, Mary is required to increase her income and have an additional master’s degree that is not required for John. This condition represents explicit bias and unequal treatment with respect to a similar individual.
 
-From a group level perspective, the disparate impact is very low whereas the explicit bias is between 63\% and 100\% depending on the classifier.
+If we considered only state-of-the-art metrics, this would not be highlighted. It would seem that the predictors are fairly fair, with a bias behavior percentage around 10\%. The percentage of identified bias is significantly higher with our metrics. This aligns with expectations. Fairness through awareness, not working on counterfactuals, indeed measures something completely different, not studying the necessity of impacting sensitive attributes in the decision change or having unequal treatment to swap a decision.
 %
-This means that the positive outcomes are not evenly distributed amongst female and male applicants, nor is the decision bias across the represented groups.
+Counterfactual fairness, although it works on counterfactuals by focusing on the specific case, does not capture everything detected by our metrics. In fact, its value is contained in our metric for explicit bias, although it is expanded because we generally study whether a decision swap requires a change in a sensitive attribute (specifically gender). Many cases are overlooked by counterfactual fairness, limiting the possible change only to the sensitive attribute under examination.
 %
-It is possible to notice that male individuals have almost no bias at all, regardless of their outcome, whereas female individuals receive strongly biased decisions.
-%
-As for the unequal treatment extent at group level, it is possible to observe that any male(female) individual is treated differently from the most similar female(male) individual receiving the same outcome, regardless of the chosen classifier.
+Unequal treatment is not measured by either of the two existing metrics, but it represents a particularly interesting value for adhering to current legislation.
 
-In general, a significant bias towards female individuals can be detected, highlighting that outcomes from black boxes are predominantly influenced by sensitive attributes.
-The analysis is confirmed by the knowledge extracted with GridEx, highlighting that positive or negative outcomes depends on protected features. This constitutes a clear source of unfairness, correctly captured by our metrics.
-%
-All analyses and provided percentages offer an automated calculation basis that can be useful for legal experts to determine whether a \emph{prima facie} discrimination can be supported in the case at hand. Therefore, the results are very effective in providing a concise overview on the situation, highlighting scenarios that would not have been evident with traditional methods.
+\paragraph{Group fairness results}
+For group fairness, we chose to compare using the state-of-the-art disparate impact metric \cite{FeldmanFMSV15}, which represents the proportion of positive classifications across groups.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Conclusions}
-%%%%%%%%%%%%%%%%%%%%%%%%%%
-This paper tackles the issue of fairness assessment through counterfactual explanations. The analysis of counterfactuals enables a deeper understanding of the potential causes leading to discrimination in decisions made by AI systems.
+From a group-level perspective, the disparate impact is very low, while the explicit bias ranges between 63\% and 100\% depending on the classifier. This indicates that positive outcomes are not evenly distributed among female and male applicants, nor is the decision bias consistent across the represented groups.
+%
+Notably, male individuals experience almost no bias at all, regardless of their outcome, whereas female individuals receive strongly biased decisions. Regarding the extent of unequal treatment at the group level, it is evident that any male (female) individual is treated differently from the most similar female (male) individual receiving the same outcome, regardless of the chosen classifier.
+%
+Overall, a significant bias against female individuals can be detected, highlighting that outcomes from black-box models are predominantly influenced by sensitive attributes. This analysis is confirmed by the knowledge extracted with GridEx, demonstrating that both positive and negative outcomes depend on protected features. This constitutes a clear source of unfairness, accurately captured by our metrics and completely discarded by the disparate impact metric.
 
-Novel concepts of counterfactual fairness are introduced, to address both individual and group fairness in automatic decision-making.
-%
-%Our approach aims to foster a better understanding of how sensitive attributes influence decisions in AI systems.
-%
-The work has demonstrated an initial and highly effective experimentation on a well-known data set used as a benchmark for fairness-related issues.
+All analyses and provided percentages offer an automated calculation basis that can be useful for legal experts to determine whether \emph{prima facie} discrimination can be supported in the case at hand. Therefore, the results are very effective in providing a concise overview of the situation, highlighting scenarios that would not have been evident with traditional methods.
 
-Future works will be devoted to more extensive experimentation, involving data from real-world use cases and validation from stakeholders. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section{Conclusions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%This paper tackles the issue of fairness assessment through counterfactual explanations. The analysis of counterfactuals enables a deeper understanding of the potential causes leading to discrimination in decisions made by AI systems.
 %
-An enhancement of the proposed metrics would be relaxing the equality constraint for counterfactuals of similar individuals into a similarity constraint with a threshold.
+%Novel concepts of counterfactual fairness are introduced, to address both individual and group fairness in automatic decision-making.
+%%
+%%Our approach aims to foster a better understanding of how sensitive attributes influence decisions in AI systems.
+%%
+%The work has demonstrated an initial and highly effective experimentation on a well-known data set used as a benchmark for fairness-related issues.
 %
-The computational cost of group fairness metrics may be enhanced by selecting a set of representative individuals for each group and by computing the fairness scores on them.
-%
-Additionally, more generalised definitions incorporating causality will be explored.
+%Future works will be devoted to more extensive experimentation, involving data from real-world use cases and validation from stakeholders. 
+%%
+%An enhancement of the proposed metrics would be relaxing the equality constraint for counterfactuals of similar individuals into a similarity constraint with a threshold.
+%%
+%The computational cost of group fairness metrics may be enhanced by selecting a set of representative individuals for each group and by computing the fairness scores on them.
+%%
+%Additionally, more generalised definitions incorporating causality will be explored.
 
 
 \section{Acknowledgments}
