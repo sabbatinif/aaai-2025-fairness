@@ -127,7 +127,7 @@ This study explores the potential of counterfactual explanations to assess AI fa
 %
 Existing statistical fairness metrics often lack legal compliance or define fairness around thresholds that defy universal definitions and are not legally sound.
 %
-The goal of this work is to define a measure of fairness for AI systems based on explainable artificial intelligence concepts. Specifically, it leverages the analysis of counterfactual explanations of individuals/groups and their comparison with similar individuals/groups. Compared to existing state-of-the-art works, the contributions are \textit{i)} extending the definition of individual fairness, not limiting unfairness to decisions based on sensitive attributes but also ensuring similar treatment among similar individuals; \textit{ii)} revisiting (and generalizing) existing notions and introducing new, more refined notions of group fairness based on counterfactuals; \textit{iii)} defining quantitative fairness metrics that reflect the evidence gathered through the analysis/comparison of counterfactual explanations.
+The goal of this work is to define a measure of fairness for AI systems based on explainable artificial intelligence concepts. Specifically, it leverages the analysis of counterfactual explanations of individuals/groups and their comparison with similar individuals/groups. Compared to existing state-of-the-art works, the contributions are \textit{i)} extending the definition of individual fairness, not limiting unfairness to decisions based on sensitive attributes but also ensuring similar treatment amongst similar individuals; \textit{ii)} revisiting (and generalising) existing notions and introducing new, more refined notions of group fairness based on counterfactuals; \textit{iii)} defining quantitative fairness metrics that reflect the evidence gathered through the analysis/comparison of counterfactual explanations.
 \end{abstract}
 
 % Uncomment the following to link to your code, datasets, an extended version or similar.
@@ -150,9 +150,9 @@ Many research efforts have focused on these topics, both separately and in a com
 %
 In particular, explainable artificial intelligence (XAI) techniques \cite{8466590} can be employed to understand AI systems and highlight the presence of unfair or discriminatory behaviours, thereby enabling the achievement of \textit{fair ML} \cite{10.1145/3616865}.
 %
-According to this research direction, we propose studying counterfactual explanations from methods in the XAI field to detect and measure unfairness in AI-based decisions. In a nutshell, counterfactual explanations are hypothetical scenarios identifying the input features to be changed to obtain a different outcome (e.g., from rejection to acceptance) \cite{guidotti2022counterfactual,10.1145/3527848}. 
+According to this research direction, we propose studying counterfactual explanations from methods in the XAI field to detect and measure unfairness in AI-based decisions. In a nutshell, counterfactual explanations are hypothetical scenarios identifying the input features to be changed to obtain a different outcome, e.g., from rejection to acceptance \cite{guidotti2022counterfactual,10.1145/3527848}. 
 
-The analysis of counterfactuals highlights whether the requirements to reverse a decision can be considered free from discrimination. Existing works on fairness via counterfactuals are often limited in scope and typically focus only on ensuring the concept of individual fairness. \cite{NIPS2017_a486cd07,wachter2017counterfactual}
+The analysis of counterfactuals highlights whether the requirements to reverse a decision can be considered free from discrimination. Existing works on fairness via counterfactuals are often limited in scope and typically focus only on ensuring the concept of individual fairness \cite{NIPS2017_a486cd07,wachter2017counterfactual}.
 %
 Depending on the domain, these approaches can be computationally expensive or even unfeasible.
 %
@@ -160,12 +160,12 @@ Depending on the domain, these approaches can be computationally expensive or ev
 %
 The contributions of this work aim at enhancing the current literature on counterfactual fairness.
 %
-First, we extend the definition of individual fairness, not limiting unfairness to decisions based on sensitive attributes but also ensuring similar treatment among similar individuals\footnote{In this work, we adopt the terms "protected" and "sensitive" as synonyms, since the fairness considerations discussed here apply to both categories}.
+First, we extend the definition of individual fairness, not limiting unfairness to decisions based on sensitive attributes but also ensuring similar treatment amongst similar individuals\footnote{In this work, we adopt the terms ``protected'' and ``sensitive'' as synonyms, since the fairness considerations discussed here apply to both categories}.
 %
-Consistent with the literature, an explicit bias is highlighted if counterfactuals involve sensitive attributes, meaning that decisions are made based on those attributes. Additionally, we introduce a stronger formulation of fairness, ensuring equal treatment for decision reversals. Unequal treatment is revealed if counterfactuals for similar individuals (i.e., equally qualified) who receive the same outcomes are not identical, indicating that similar individuals are required to accomplish different actions to obtain a decision reversal.
-
-Second, we formulate the same fairness definitions for groups, revisiting and generalizing existing notions of group fairness based on counterfactuals.
-
+Consistent with the literature, an explicit bias is highlighted if counterfactuals involve sensitive attributes, meaning that decisions are based on those attributes. Additionally, we introduce a stronger formulation of fairness, ensuring equal treatment for decision reversals. Unequal treatment is revealed if counterfactuals for similar individuals (i.e., equally qualified) who receive the same outcomes are not identical, indicating that similar individuals are required to accomplish different actions to obtain a decision reversal.
+%
+Second, we formulate the same fairness definitions for groups, revisiting and generalising existing notions of group fairness based on counterfactuals.
+%
 Finally, we define quantitative, computationally feasible fairness metrics based on these definitions that reflect the evidence gathered through the analysis/comparison of counterfactual explanations.
 
 \paragraph{Motivating example}
@@ -249,7 +249,7 @@ Inspired by the concept of \emph{consistency} introduced by \cite{ZemelWSPD13}, 
 	%where
 	$$\mathcal{K}^{\boldsymbol{z}_i} \subseteq \mathcal{Z} : ~ | \mathcal{K}^{\boldsymbol{z}_i} | = k,$$
 	%$$\hat{y}_j = \hat{y}_i, ~ \forall \boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i},$$
-	$$d(\boldsymbol{x}_i, \boldsymbol{x}_k) \geq \underset{\boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i}}{\max} d(\boldsymbol{x}_i, \boldsymbol{x}_j), ~ \forall \boldsymbol{z}_k \in \mathcal{Z} \setminus \mathcal{K}^{\boldsymbol{z}_i}$$ % : ~ \hat{y}_k = \hat{y}_i.$$
+	$$d(\boldsymbol{x}_i, \boldsymbol{x}_l) \geq \underset{\boldsymbol{z}_j \in \mathcal{K}^{\boldsymbol{z}_i}}{\max} d(\boldsymbol{x}_i, \boldsymbol{x}_j), ~ \forall \boldsymbol{z}_l \in \mathcal{Z} \setminus \mathcal{K}^{\boldsymbol{z}_i}$$ % : ~ \hat{y}_k = \hat{y}_i.$$
 \end{definition}
 %
 \noindent In other words, all individuals outside the $k$-neighbourhood of $\boldsymbol{z}_i$ have larger distance from $\boldsymbol{z}_i$ than any of the $k$ individuals inside its $k$-neighbourhood and the sensitive attributes are not taken into account in the distance determination.
@@ -258,7 +258,7 @@ Inspired by the concept of \emph{consistency} introduced by \cite{ZemelWSPD13}, 
 \subsection{Individual Fairness Based on Counterfactuals}
 %--------------------------------------------------------------------
 
-According to the current literature, an \emph{explicit bias} is present in a predictive model if its counterfactual explanations imply that at least one protected attribute should be changed to obtain different outcomes \cite{sokol2022fat}. This definition also superposes with the concept of \emph{counterfactual fairness} \cite{NIPS2017_a486cd07}.
+According to the current literature, an \emph{explicit bias} is present in a predictive model if its counterfactual explanations imply that at least one protected attribute should be changed to obtain different outcomes \cite{sokol2022fat}. This definition partially superposes with the concept of \emph{counterfactual fairness} \cite{NIPS2017_a486cd07}.
 
 \begin{definition}[Individual fairness: explicit bias]\label{explicit_bias}
 	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ for the individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with non-protected attribute values $\boldsymbol{x}_{i}$ and protected attribute values $\boldsymbol{a}_{i}$ belonging to the domain $\mathcal{Z}$ is \emph{explicitly biased} if the counterfactuals $\boldsymbol{z}_i^c = (\boldsymbol{x}_i^c, \boldsymbol{a}_i^c)$ have different values for some sensitive variables of $\boldsymbol{z}_i$, for at least one of the factual individuals, i.e., if $\exists \boldsymbol{z}_i \in \mathcal{Z} : ~ \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c}$.
@@ -290,7 +290,7 @@ Finally, we present the definition of \emph{comprehensive individual fairness} b
 
 \Cref{explicit_bias,unequal_treatment} can be extended to carry out group fairness evaluations based on counterfactuals.
 
-We define the concept of explicit bias for a group identified by the values $\boldsymbol{s}$ of the protected attributes by checking whether the explicit bias for individuals belonging to a specific group is different to the bias for individuals within a different group.
+We define the concept of explicit bias for a group identified by the values $\boldsymbol{s}$ of the protected attributes by checking whether the explicit bias for individuals belonging to that specific group is different to the bias for individuals within a different group.
 %
 The notion of individual bias is the same given in \Cref{explicit_bias}.
 %
@@ -310,10 +310,10 @@ About the motivating example, counterfactual group fairness via explicit bias en
 %
 On the other hand, by assessing group fairness through unequal treatment it is possible to ensure that similar individuals of different groups who were denied the loan (e.g., John and Mary) can obtain it by fulfilling the same requirements, without receiving different treatments based on their group belonging.
 
-The notions formalised in \Cref{explicit_bias_group,unequal_treatment_group} can be merged in a stricter concept of \emph{comprehensive group fairness}, as follows.
+The notions formalised in \Cref{explicit_bias_group,unequal_treatment_group} can be merged in the concept of \emph{comprehensive group fairness}, as follows.
 %
 \begin{definition}[Group comprehensive fairness]\label{comprehensive_group}
-	A decision system based on the predictive function $\hat{Y}$ is \emph{comprehensively group-fair} if the explicit bias of its outcomes is homogeneous across the represented groups and if it exhibits equal treatment for similar individuals belonging to different groups, i.e., $\mathbb{P}(\boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c}) = \mathbb{P}(\boldsymbol{a}_{j} \neq \boldsymbol{a}_{j}^{c}) \wedge \boldsymbol{z}_i^c = \boldsymbol{z}_l^c, ~ \forall \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{s}}_o, \boldsymbol{z}_j, \boldsymbol{z}_l \in \mathcal{Z}^{\boldsymbol{s}'}_o : ~ \boldsymbol{s} \neq \boldsymbol{s}' \wedge \boldsymbol{z}_i \sim \boldsymbol{z}_l \wedge \hat{y}_i = \hat{y}_j = \hat{y}_l = o$.
+	A decision system based on the predictive function $\hat{Y}$ is \emph{comprehensively group-fair} if the explicit bias of its outcomes is homogeneous across the represented groups and if it exhibits equal treatment for similar individuals belonging to different groups, i.e., $\mathbb{P}(\boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c}) = \mathbb{P}(\boldsymbol{a}_{j} \neq \boldsymbol{a}_{j}^{c}) \wedge \boldsymbol{z}_i^c = \boldsymbol{z}_j^c, ~ \forall \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{s}}_o, \boldsymbol{z}_j \in \mathcal{Z}^{\boldsymbol{s}'}_o : ~ \boldsymbol{s} \neq \boldsymbol{s}' \wedge \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j = o$.
 \end{definition}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -357,7 +357,7 @@ We focus on a tabular data set commonly used as a benchmark in the literature ab
 %
 The data set provides the results of a census made in 1994 in the United States. Specifically, it contains information about 48\,842 individuals, described through 8 categoric and 6 numeric features. Some instances present missing data.
 %
-The objective of this data set is to predict whether an individual's annual income is above or below $50\,000\$$, considering factors such as occupation, marital status, and education. The data set contains demographic attributes such as age, gender, and race.
+The objective of this data set is to predict whether an individual's annual income is above or below $50\,000\$$, considering factors such as occupation, marital status, and education. The data set contains demographic attributes, e.g., age, gender, and race.
 %
 Therefore, it has gained significant popularity within the algorithmic fairness community as a reliable benchmark for evaluating and comparing the effectiveness of fair ML techniques.
 %
@@ -392,23 +392,23 @@ Therefore, it has gained significant popularity within the algorithmic fairness 
 
 % Our fairness experiments employ a set of opaque classifiers trained on the Adult Income data set, i.e., a gradient boosting (GB), a K-nearest neighbor (KNN) and a support vector machine (SVM) whose hyper-parameters are resumed in \Cref{tab:bb}.
 
-\begin{table}[t!]
-\scriptsize{
-	\begin{center}{\caption{Performance of the black-box (BB) predictors employed in our experiments. The fidelity achieved by the knowledge extractors applied to the BBs is also reported. Average values over 10 runs are reported.}\label{tab:bb}}
-		\begin{tabular}{lll}
-			\toprule
-			BB & BB accuracy & Extractor fidelity  \\
-			\midrule					
-			GB & 0.85 $\pm$ 0.00 & 0.88 $\pm$ 0.00 \\
-			\midrule
-			KNN & 0.82 $\pm$ 0.00 & 0.90 $\pm$ 0.00 \\
-			\midrule
-			SVM & 0.83 $\pm$ 0.00 & 0.88 $\pm$ 0.00 \\
-			\bottomrule
-		\end{tabular}
-	\end{center}
-}
-\end{table}
+%\begin{table}[t!]
+%\scriptsize{
+%	\begin{center}{\caption{Performance of the black-box (BB) predictors employed in our experiments. The fidelity achieved by the knowledge extractors applied to the BBs is also reported. Average values over 10 runs are reported.}\label{tab:bb}}
+%		\begin{tabular}{lll}
+%			\toprule
+%			BB & BB accuracy & Extractor fidelity  \\
+%			\midrule					
+%			GB & 0.85 $\pm$ 0.00 & 0.88 $\pm$ 0.00 \\
+%			\midrule
+%			KNN & 0.82 $\pm$ 0.00 & 0.90 $\pm$ 0.00 \\
+%			\midrule
+%			SVM & 0.83 $\pm$ 0.00 & 0.88 $\pm$ 0.00 \\
+%			\bottomrule
+%		\end{tabular}
+%	\end{center}
+%}
+%\end{table}
 
 \paragraph{Data preparation and model training}
 
@@ -428,11 +428,11 @@ In detail, categorical features for sex and race were converted into integer val
 %
 The resulting data set was split into training and test sets with a 50\%:50\% ratio.
 %
-The training set was used for hyperparameter tuning of the black-box classifiers via a grid search with 3-fold cross-validation.
+The training set was used for hyper-parameter tuning of the black-box classifiers via a grid search with 3-fold cross-validation.
 %
-After tuning, the classifiers, parameterized with the best-found values, were trained on the entire training set.
+After tuning, the classifiers, parametrised with the best-found values, were trained on the entire training set.
 %
-The resulting accuracy scores were consistent with the baseline performance established by the Adult data set benchmarks (see \Cref{tab:bb}).
+The resulting accuracy scores were consistent with the baseline performance established by the Adult data set benchmarks (see \Cref{tab:res}).
 
 \paragraph{Counterfactual generation via knowledge extraction}
 
@@ -448,18 +448,21 @@ The execution of GridEx requires the tuning of a set of hyper-parameters, namely
 %
 An adaptive splitting strategy aware of the input feature relevance has been preferred over a fixed strategy leading to the indiscriminate partitioning of every input feature regardless of their importance. More in detail, we selected GridEx instances performing no slices along input dimensions with relevance below 0.15 and obtaining, conversely, 2 or 3 partitions for dimensions with importance above 0.15 or 0.90, respectively\footnote{The input feature importance may be estimated via arbitrary methods, as long as these estimates are provided to GridEx normalised in the [0, 1] interval.}.
 %
-These optima values have been set via the dedicated PEDRO procedure implemented within PSyKE. % \cite{gridrex-kr2022}.
+These optimum values have been set via the dedicated PEDRO procedure implemented within PSyKE. % \cite{gridrex-kr2022}.
 %
 The result of the knowledge-extraction process is a set of symbolic rules expressed in Prolog format, summarising the rationale behind the classification in a human-interpretable way.
 %
 An example is shown in \Cref{lst:rules}.
 
 \begin{table*}[t!]
-\scriptsize{
-	\begin{center}{\caption{Fairness assessment results. $f$ and $m$ denote individual groups based on female and male sex, respectively. $+$ and $-$ denote positive and negative outcomes, respectively.}\label{tab:res}}
+%\scriptsize{
+	\begin{center}{\caption{Experiment results. $f$ and $m$ denote individual groups based on female and male sex, respectively. $+$ and $-$ denote positive and negative outcomes, respectively. Accuracy of the black boxes and fidelity of knowledge extractors are also reported.}\label{tab:res}}
 		\begin{tabular}{ll|c|c|c}
 			\toprule
-			Fairness metrics $\downarrow$ & BB $\rightarrow$ & GB & KNN & SVM \\
+			Metrics $\downarrow$ & Black box $\rightarrow$ & GB & KNN & SVM \\
+			\midrule
+			Black-box accuracy & & 0.85 $\pm$ 0.00 & 0.82 $\pm$ 0.00 & 0.83 $\pm$ 0.00 \\
+			Extractor fidelity & & 0.88 $\pm$ 0.00 & 0.90 $\pm$ 0.00 & 0.88 $\pm$ 0.00 \\
 			\midrule
 			Individual fairness: & & & & \\
 			~ ~ Fairness through awareness & & 0.92 $\pm$ 0.00 & 0.94 $\pm$ 0.00 & 0.95 $\pm$ 0.00 \\
@@ -473,7 +476,7 @@ An example is shown in \Cref{lst:rules}.
 			~ ~ ~ ~ Male group, positive outcome & $\phi_b^{m,+}$ & 0.33 $\pm$ 0.00 & 0.03 $\pm$ 0.00 & 0.03 $\pm$ 0.00 \\
 			~ ~ ~ ~ Female group, positive outcome & $\phi_b^{f,+}$ & 0.42 $\pm$ 0.02 & 0.36 $\pm$ 0.13 & 0.98 $\pm$ 0.01 \\
 			~ ~ ~ ~ Male group, negative outcome & $\phi_b^{m,-}$ & 0.07 $\pm$ 0.03 & 0.00 $\pm$ 0.00 & 0.00 $\pm$ 0.00 \\
-			~ ~ ~ ~ Female group, negative outcome & $\phi_b^{f,-}$ & 0.70 $\pm$ 0.05 & 0.91 $\pm$ 0.12 & 1.00 $\pm$ 0.00 \smallskip \\
+			~ ~ ~ ~ Female group, negative outcome & $\phi_b^{f,-}$ & 0.70 $\pm$ 0.05 & 0.91 $\pm$ 0.12 & 1.00 $\pm$ 0.00 \\
 			~ ~ Unequal treatment & $\Phi_t^g$ & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 \\
 			~ ~ ~ ~ Male group versus female group, positive outcome & $\phi_t^{m,f,+}$ & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 \\
 			~ ~ ~ ~ Female group versus male group, positive outcome & $\phi_t^{f,m,+}$ & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 \\
@@ -482,7 +485,7 @@ An example is shown in \Cref{lst:rules}.
 			\bottomrule
 		\end{tabular}
 	\end{center}
-}
+%}
 \end{table*}
 
 \begin{listing*}[t!]
@@ -516,16 +519,16 @@ In general, GridEx may serve as a stable and efficient counterfactual explainer.
 It is important to note that fairness is not guaranteed by the design in GridEx; rather, it reflects the same level of fairness as the black-box classifier it explains. Therefore, GridEx can be used as a tool to assess the fairness extent of its underlying opaque predictors.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Discussion adn Conclusions}
+\section{Discussion and Conclusions}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-The experiments conducted in this study consider sex and race as sensitive attributes, as described in the Adult Income dataset. However, since race does not significantly influence the counterfactuals or the classification process (we observed no differences based on racial subgroups), the results in the table refer only to gender and are not grouped based on race. These findings can also be verified by analyzing \Cref{lst:rules}. The first two rules highlight that female and male individuals with the same characteristics (education and income) receive different outcomes based on their sex, while race is never considered in determining the outcome.
-%
+The experiments conducted in this study consider sex and race as sensitive attributes, as described in the Adult Income dataset. However, since race does not significantly influence the counterfactuals or the classification process (we observed no differences based on racial subgroups), the results in \Cref{tab:res} refer only to gender and are not grouped based on race. These findings can also be verified by analysing \Cref{lst:rules}. The first two rules highlight that female and male individuals with the same characteristics (education and income) receive different outcomes based on their sex, while race is never considered in determining the outcome.
+
 All results were averaged over 10 runs, each with different train/test splits and, consequently, different black-box model training.
 %
 As a result, the corresponding extraction techniques were also trained each time with a different set of instances.
 %
-Comprehensive results of our experiments are summarized in \Cref{tab:res}.
+Comprehensive results of our experiments are summarised in \Cref{tab:res}.
 
 \paragraph{Individual fairness results}
 The results of our experiments were compared with two widely used state-of-the-art metrics for individual fairness, namely fairness through awareness \cite{10.1145/2090236.2090255}, which quantifies pairs of similar individuals receiving the same classification, and counterfactual fairness \cite{NIPS2017_a486cd07}, which indicates if individuals receive the same outcome after changing their sensitive attributes.
@@ -538,7 +541,7 @@ According to our metrics, the individual explicit bias is around 30\% for all mo
 %
 This means that one individual out of three receives a counterfactual based on protected features, while two individuals out of five receive a different counterfactual compared to similar individuals receiving the same outcome.
 %
-In other words, one individual out of three is required to change sex (possibly among other features) to have a decision reversal, and two individuals out of five are treated differently depending on gender and can obtain a decision swap by fulfilling different conditions compared to similar individuals.
+In other words, one individual out of three is required to change sex (possibly amongst other features) to have a decision reversal, and two individuals out of five are treated differently compared to similar individuals, since they can obtain a decision swap by fulfilling different conditions.
 %
 With reference to the running example, John and Mary are similar (in terms of socio-economic status) and both did not receive the loan (thus fairness through awareness is ensured). Mary is not able to obtain it even if she changes her sex to male (counterfactual fairness is ensured). John can get the loan by increasing his income. However, Mary is required to increase her income and have an additional master’s degree that is not required for John. This condition represents explicit bias and unequal treatment with respect to a similar individual.
 
@@ -551,7 +554,7 @@ Unequal treatment is not measured by either of the two existing metrics, but it 
 \paragraph{Group fairness results}
 For group fairness, we chose to compare using the state-of-the-art disparate impact metric \cite{FeldmanFMSV15}, which represents the proportion of positive classifications across groups.
 
-From a group-level perspective, the disparate impact is very low, while the explicit bias ranges between 63\% and 100\% depending on the classifier. This indicates that positive outcomes are not evenly distributed among female and male applicants, nor is the decision bias consistent across the represented groups.
+From a group-level perspective, the disparate impact is very low, while the explicit bias ranges between 63\% and 100\% depending on the classifier. This indicates that positive outcomes are not evenly distributed amongst female and male applicants, nor is the decision bias consistent across the represented groups.
 %
 Notably, male individuals experience almost no bias at all, regardless of their outcome, whereas female individuals receive strongly biased decisions. Regarding the extent of unequal treatment at the group level, it is evident that any male (female) individual is treated differently from the most similar female (male) individual receiving the same outcome, regardless of the chosen classifier.
 %
