@@ -142,7 +142,7 @@ The goal of this work is to define a measure of fairness for AI systems based on
 \section{Introduction}\label{sec:introduction}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Over the past decade, automated decision-making systems have seen increasing use in high-steak real-world domains, with significant impacts on people's lives, e.g., healthcare \cite{Morik10}, finance \cite{10.5555/573193}, and criminal justice \cite{angwin2016machine,DBLP:journals/corr/abs-1905-12728}. While artificial intelligence (AI) and machine learning (ML) have demonstrated effectiveness in these predictive processes, concerns are growing regarding their trustworthiness, and in particular about transparency and discriminatory biases in predictions.
+Over the past decade, automated decision-making systems have seen increasing use in high-steak real-world domains, with significant impacts on people's lives, e.g., healthcare \cite{Morik10}, finance \cite{cao2020ai}, and criminal justice \cite{angwin2016machine,DBLP:journals/corr/abs-1905-12728}. While artificial intelligence (AI) and machine learning (ML) have demonstrated effectiveness in these predictive processes, concerns are growing regarding their trustworthiness, and in particular about transparency and discriminatory biases in predictions.
 %
 In response, the European Commission has proposed the first comprehensive legislation on AI systems, known as the AI Act, aimed at establishing a common regulatory and legal framework to ensure the trustworthiness of AI systems before their availability on the European Union market \cite{europeancommission2021}. Amongst the fundamental principles underlying the AI Act are fairness, non-discrimination, and transparency (understood as explainability and traceability).
 
@@ -171,7 +171,9 @@ Finally, we define quantitative, computationally feasible fairness metrics based
 \paragraph{Motivating example}
 We introduce a running example to better understand the scenario and our definitions. A bank company needs to select individuals to grant loans from a large pool of applicants. An ML predictive algorithm, based on applicants' data (e.g., yearly income, occupation, education, age, and gender), is thus developed to make decisions. Specifically, the system predicts whether a candidate would have the possibility to repay the loan, and those individuals are granted a loan. However, the algorithm tends to generate more positive predictions for one gender (e.g., males) compared to others (e.g., females and non-binary individuals). In particular, John and Mark, male candidates, receive positive outcomes, whereas Clara and Mary, female candidates, receive rejections, even though all four individuals appear qualified to receive the loan. To address this bias, the company implements fair ML techniques to mitigate the issue. Unfortunately, as a result of this modification, John is denied a loan, seemingly without explanation. In this new scenario, Mark and Clara receive the loan, while John and Mary do not. John raises a complaint, citing examples of individuals, Clara and Mark, who were granted loans despite possessing qualifications similar to his. Should the company persist in its position or should it modify the model once again to ensure fairness?
 
-Generally speaking, when considering a situation where a loan application is declined, a fair decision entails that the explanation provided by the company about the required changes to receive credit remains independent of sensitive attributes (e.g., gender, or ethnicity). Accordingly, the counterfactual explanation for John receiving the loan should be produced by the system, and if no sensitive attribute is contained, the decision should be considered fair. This is what existing works usually address.
+Generally speaking, when considering a situation where a loan application is declined, a fair decision entails that the explanation provided by the company about the required changes to receive credit remains independent of sensitive attributes (e.g., gender, or ethnicity). 
+%---RC CAMBIATO Accordingly, the counterfactual explanation for John receiving the loan should be produced by the system, and if no sensitive attribute is contained, the decision should be considered fair. 
+Accordingly, if John was denied a loan, the decision should not be different if John had a gender or ethnicity different from the ones he currently possesses. This is what existing works usually address.
 %
 However, we advocate this is not enough, and the company should be able to prove that similar individuals (or groups) are treated similarly, i.e., the counterfactuals of similar individuals are exactly the same and protected features are not taken into account to assess similarity. It means that if Mary is similar to John (i.e., their non-protected attributes are similar) and they both receive a negative prediction, they should have the same requirements to reverse the decision (i.e., identical counterfactuals).
 
@@ -179,7 +181,8 @@ However, we advocate this is not enough, and the company should be able to prove
 \section{Related Works}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Discrimination has been identified in AI systems operation in various domains, e.g., justice \cite{ProPublica2}, facial recognition \cite{pmlr-v81-buolamwini18a}, search engines \cite{10.1145/2702123.2702520}, and recruitment \cite{Leicht-Deobald}, highlighting the importance of ethics in the development and use of these tools for governments and societies \cite{act1964civil}.
+Discrimination has been identified in the operation of AI systems across various domains, such as justice \cite{ProPublica2}, facial recognition \cite{pmlr-v81-buolamwini18a}, search engines \cite{10.1145/2702123.2702520}, and recruitment \cite{Leicht-Deobald}, highlighting the importance of ethical requirements in the development and use of AI tools that impact society \cite{bostrom2020ethical}.
+%
 Recent studies have proven that data-driven algorithms can inherit, reproduce, or even amplify existing patterns in the data related to inequalities between different demographic groups of age, gender, or ethnicity \cite{chouldechova2018frontiers,10.1145/2090236.2090255}. 
 
 Although fairness in ML \cite{Barocas2018FairnessAM} is a relatively recent field of research, several approaches in the literature have already proposed some formalisations of equity within AI systems \cite{wang2022brief,10.1145/3494672}.
@@ -535,32 +538,38 @@ The results of our experiments were compared with two widely used state-of-the-a
 %
 From the fairness measurements, it is notable that the results for KNN are generally less stable (higher standard deviation) than those obtained for the GB and SVM models, yet still aligned with their measurements.
 %
-Overall, state-of-the-art metrics suggest that all classifiers exhibit a fairness extent around 90\%, considering both fairness through awareness and counterfactual fairness.
+Overall, state-of-the-art metrics suggest that all classifiers exhibit approximately 90\% fairness, considering both fairness through awareness and counterfactual fairness.
 %
 According to our metrics, the individual explicit bias is around 30\% for all models, whereas the individual unequal treatment is around 40\%.
 %
 This means that one individual out of three receives a counterfactual based on protected features, while two individuals out of five receive a different counterfactual compared to similar individuals receiving the same outcome.
 %
-In other words, one individual out of three is required to change sex (possibly amongst other features) to have a decision reversal, and two individuals out of five are treated differently compared to similar individuals, since they can obtain a decision swap by fulfilling different conditions.
+In other words, one individual out of three is required to change sex (possibly amongst other features) to have a decision reversal, and two individuals out of five are treated differently compared to similar individuals since they can obtain a decision swap by fulfilling different conditions.
 %
-With reference to the running example, John and Mary are similar (in terms of socio-economic status) and both did not receive the loan (thus fairness through awareness is ensured). Mary is not able to obtain it even if she changes her sex to male (counterfactual fairness is ensured). John can get the loan by increasing his income. However, Mary is required to increase her income and have an additional master’s degree that is not required for John. This condition represents explicit bias and unequal treatment with respect to a similar individual.
+Returning to our running example, let it be the case that John and Mary are similar in terms of socio-economic status, and both were denied a loan, which ensures fairness through awareness. Additionally, Mary is unable to obtain the loan even if she changes her sex to male, thus satisfying counterfactual fairness. 
+%
+However, let's consider a scenario where, for Mary to get the loan, she needs to meet three conditions: changing her gender to male, increasing her income, and obtaining an additional master’s degree. In contrast, John only needs to increase his income. 
+%
+This situation exposes both explicit bias (Mary being required to change her gender) and unequal treatment compared to a similar individual (Mary being required to fulfill additional criteria beyond income, unlike John).
 
-If we considered only state-of-the-art metrics, this would not be highlighted. It would seem that the predictors are fairly fair, with a bias behavior percentage around 10\%. The percentage of identified bias is significantly higher with our metrics. This aligns with expectations. Fairness through awareness, not working on counterfactuals, indeed measures something completely different, not studying the necessity of impacting sensitive attributes in the decision change or having unequal treatment to swap a decision.
+These issues are not captured by state-of-the-art metrics. At first glance, the predictors might appear to be fairly unbiased, with only around 10\% biased behavior. However, our metrics reveal a significantly higher percentage of bias, which aligns with expectations.
 %
-Counterfactual fairness, although it works on counterfactuals by focusing on the specific case, does not capture everything detected by our metrics. In fact, its value is contained in our metric for explicit bias, although it is expanded because we generally study whether a decision swap requires a change in a sensitive attribute (specifically gender). Many cases are overlooked by counterfactual fairness, limiting the possible change only to the sensitive attribute under examination.
+Explicit bias is not fully captured by existing metrics like counterfactual fairness, which typically only assess the impact of changing a single sensitive attribute (e.g., gender) on the decision outcome. They do not account for scenarios where changing gender in conjunction with other factors leads to a different decision. Our explicit bias metric captures this more nuanced condition, identifying it as unfair. It is evident that cases detected by counterfactual fairness are a subset of those identified by our metric.
 %
-Unequal treatment is not measured by either of the two existing metrics, but it represents a particularly interesting value for adhering to current legislation.
+Fairness through awareness, which doesn’t operate on counterfactuals, measures something entirely different. It does not assess whether changing sensitive attributes affects the decision or whether there is unequal treatment in decision-making.
+%
+Unequal treatment, not addressed by either existing metric, is however particularly interesting for adherence to current legislation.
 
 \paragraph{Group fairness results}
-For group fairness, we chose to compare using the state-of-the-art disparate impact metric \cite{FeldmanFMSV15}, which represents the proportion of positive classifications across groups.
+For group fairness, we utilized the state-of-the-art disparate impact metric \cite{FeldmanFMSV15}, which measures the proportion of positive classifications across different groups.
 
-From a group-level perspective, the disparate impact is very low, while the explicit bias ranges between 63\% and 100\% depending on the classifier. This indicates that positive outcomes are not evenly distributed amongst female and male applicants, nor is the decision bias consistent across the represented groups.
+From a group-level perspective, the disparate impact is very low, indicating the presence of bias. Similarly, explicit bias ranges from 63\% to 100\% depending on the classifier used. This suggests that positive outcomes are unevenly distributed between female and male applicants, and the decision bias varies across groups.
 %
-Notably, male individuals experience almost no bias at all, regardless of their outcome, whereas female individuals receive strongly biased decisions. Regarding the extent of unequal treatment at the group level, it is evident that any male (female) individual is treated differently from the most similar female (male) individual receiving the same outcome, regardless of the chosen classifier.
+Notably, male individuals experience almost no bias, regardless of their outcomes, while female individuals face significant bias in decision-making. This disparity highlights that any male (or female) individual is treated differently from the most similar female (or male) individual with the same outcome, irrespective of the classifier.
 %
-Overall, a significant bias against female individuals can be detected, highlighting that outcomes from black-box models are predominantly influenced by sensitive attributes. This analysis is confirmed by the knowledge extracted with GridEx, demonstrating that both positive and negative outcomes depend on protected features. This constitutes a clear source of unfairness, accurately captured by our metrics and completely discarded by the disparate impact metric.
+Overall, there is a substantial bias against female individuals, showing that outcomes from black-box models are heavily influenced by sensitive attributes. This finding is corroborated by knowledge extracted using GridEx, which reveals that both positive and negative outcomes are dependent on protected features. This constitutes a clear source of unfairness, accurately captured by all metrics. The advantage of our metrics lies in their ability to specifically identify the cause of the bias, enabling the implementation of targeted policies for its elimination.
 
-All analyses and provided percentages offer an automated calculation basis that can be useful for legal experts to determine whether \emph{prima facie} discrimination can be supported in the case at hand. Therefore, the results are very effective in providing a concise overview of the situation, highlighting scenarios that would not have been evident with traditional methods.
+All analyses and provided percentages offer an automated basis that can assist legal experts in determining whether \emph{prima facie} discrimination is present. Therefore, these results are highly effective in providing a concise overview of the situation, highlighting scenarios that traditional methods might overlook.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
