@@ -458,7 +458,7 @@ The result of the knowledge-extraction process is a set of symbolic rules expres
 An example is shown in \Cref{lst:rules}.
 
 \begin{table*}[t!]
-%\scriptsize{
+\small{
 	\begin{center}{\caption{Experiment results. $f$ and $m$ denote individual groups based on female and male sex, respectively. $+$ and $-$ denote positive and negative outcomes, respectively. Accuracy of the black boxes and fidelity of knowledge extractors are also reported.}\label{tab:res}}
 		\begin{tabular}{ll|c|c|c}
 			\toprule
@@ -472,6 +472,7 @@ An example is shown in \Cref{lst:rules}.
 			~ ~ Counterfactual fairness & & 0.89 $\pm$ 0.00 & 0.87 $\pm$ 0.00 & 0.89 $\pm$ 0.00 \\
 			~ ~ Explicit bias & $\Phi_b^i$ & 0.31 $\pm$ 0.00 & 0.30 $\pm$ 0.04 & 0.33 $\pm$ 0.00 \\
 			~ ~ Unequal treatment & $\Phi_t^i$ & 0.38 $\pm$ 0.00 & 0.40 $\pm$ 0.00 & 0.40 $\pm$ 0.00 \\
+			~ ~ \textbf{Individual comprehensive fairness} & & 0.43 $\pm$ 0.01 & 0.42 $\pm$ 0.03 & 0.40 $\pm$ 0.00 \\
 			\midrule
 			Group fairness: & & & & \\
 			~ ~ Disparate impact & & 0.17 $\pm$ 0.00 & 0.08 $\pm$ 0.01 & 0.14 $\pm$ 0.01 \\
@@ -485,10 +486,11 @@ An example is shown in \Cref{lst:rules}.
 			~ ~ ~ ~ Female group versus male group, positive outcome & $\phi_t^{f,m,+}$ & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 \\
 			~ ~ ~ ~ Male group versus female group, negative outcome & $\phi_t^{m,f,-}$ & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 \\
 			~ ~ ~ ~ Female group versus male group, negative outcome & $\phi_t^{f,m,-}$ & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 \\
+			~ ~ \textbf{Group comprehensive fairness} & & 0.00 $\pm$ 0.00 & 0.00 $\pm$ 0.00 & 0.00 $\pm$ 0.00 \\
 			\bottomrule
 		\end{tabular}
 	\end{center}
-%}
+}
 \end{table*}
 
 \begin{listing*}[t!]
@@ -550,18 +552,18 @@ Returning to our running example, let it be the case that John and Mary are simi
 %
 However, let's consider a scenario where, for Mary to get the loan, she needs to meet three conditions: changing her gender to male, increasing her income, and obtaining an additional master’s degree. In contrast, John only needs to increase his income. 
 %
-This situation exposes both explicit bias (Mary being required to change her gender) and unequal treatment compared to a similar individual (Mary being required to fulfill additional criteria beyond income, unlike John).
+This situation exposes both explicit bias (Mary being required to change her gender) and unequal treatment compared to a similar individual (Mary being required to fulfil additional criteria beyond income, unlike John).
 
-These issues are not captured by state-of-the-art metrics. At first glance, the predictors might appear to be fairly unbiased, with only around 10\% biased behavior. However, our metrics reveal a significantly higher percentage of bias, which aligns with expectations.
+These issues are not captured by state-of-the-art metrics. At first glance, the predictors might appear to be fairly unbiased, with only around 10\% biased behaviour. However, our metrics reveal a significantly higher percentage of bias, which aligns with expectations.
 %
-Explicit bias is not fully captured by existing metrics like counterfactual fairness, which typically only assess the impact of changing a single sensitive attribute (e.g., gender) on the decision outcome. They do not account for scenarios where changing gender in conjunction with other factors leads to a different decision. Our explicit bias metric captures this more nuanced condition, identifying it as unfair. It is evident that cases detected by counterfactual fairness are a subset of those identified by our metric.
+Explicit bias is not fully captured by existing metrics like counterfactual fairness, which typically only assess the impact of changing sensitive attributes (e.g., gender and/or race) on the decision outcome. They do not account for scenarios where changing gender in conjunction with other non-protected attributes leads to a different decision. Our explicit bias metric captures this more nuanced condition, identifying it as unfair. It is evident that cases detected by counterfactual fairness are a subset of those identified by our metric.
 %
-Fairness through awareness, which doesn’t operate on counterfactuals, measures something entirely different. It does not assess whether changing sensitive attributes affects the decision or whether there is unequal treatment in decision-making.
+Fairness through awareness, which doe snot operate on counterfactuals, measures something entirely different. It does not assess whether changing sensitive attributes affects the decision or whether there is unequal treatment in decision-making.
 %
 Unequal treatment, not addressed by either existing metric, is however particularly interesting for adherence to current legislation.
 
 \paragraph{Group fairness results}
-For group fairness, we utilized the state-of-the-art disparate impact metric \cite{FeldmanFMSV15}, which measures the proportion of positive classifications across different groups.
+For group fairness, we utilised the state-of-the-art disparate impact metric \cite{FeldmanFMSV15}, which measures the proportion of positive classifications across different groups.
 
 From a group-level perspective, the disparate impact is very low, indicating the presence of bias. Similarly, explicit bias ranges from 63\% to 100\% depending on the classifier used. This suggests that positive outcomes are unevenly distributed between female and male applicants, and the decision bias varies across groups.
 %
