@@ -267,11 +267,11 @@ According to the current literature, an \emph{explicit bias} is present in a pre
 	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ for the individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ with non-protected attribute values $\boldsymbol{x}_{i}$ and protected attribute values $\boldsymbol{a}_{i}$ belonging to the domain $\mathcal{Z}$ is \emph{explicitly biased} if the counterfactuals $\boldsymbol{z}_i^c = (\boldsymbol{x}_i^c, \boldsymbol{a}_i^c)$ have different values for some sensitive variables of $\boldsymbol{z}_i$, for at least one of the factual individuals, i.e., if $\exists \boldsymbol{z}_i \in \mathcal{Z} : ~ \boldsymbol{a}_{i} \neq \boldsymbol{a}_{i}^{c}$.
 \end{definition}
 
-The concept of explicit bias can be expanded by introducing the definition of \emph{unequal treatment} at the individual level based on counterfactuals.
+The concept of explicit bias can be expanded by introducing the \emph{unequal treatment} definition at the individual level based on counterfactuals.
 %
 A predictor providing different counterfactual explanations for a pair of similar individuals, receiving the same outcome,\footnote{We point out here that the unfair situation where two similar individuals receive a different outcome is beyond the scope of this work based on counterfactual fairness} exhibits an unequal treatment for the individuals.
 %
-This definition ensures that a predictor is fair only if similar individuals can change their outcomes by satisfying the same conditions, thereby preventing unequal treatment as mandated by the principle of non-discrimination in Article 21 of the EU Charter of Fundamental Rights.
+This definition ensures the predictor is fair only if similar individuals can change their outcomes by satisfying the same conditions, preventing unequal treatment as mandated by the principle of non-discrimination (Article 21 EU Charter of Fundamental Rights).
 
 \begin{definition}[Individual fairness: unequal treatment]\label{unequal_treatment}
 	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ is responsible of \emph{unequal treatment} if two individuals $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ and $\boldsymbol{z}_j = (\boldsymbol{x}_j, \boldsymbol{a}_j)$, with non-protected attribute values $\boldsymbol{x}_i, \boldsymbol{x}_j$ and protected attribute values $\boldsymbol{a}_i, \boldsymbol{a}_j$, respectively, are similar and receive the same outcome, but have different counterfactuals, i.e., if $\exists \boldsymbol{z}_i, \boldsymbol{z}_j \in \mathcal{Z} : ~ \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c$.
@@ -309,7 +309,7 @@ Unequal treatment is detected when such pairs of similar individuals receive dif
 	A decision system based on the predictive function $\hat{Y}$ and providing the outcomes $\boldsymbol{\hat{y}}$ is responsible of \emph{unequal treatment} with respect to group $\mathcal{Z}^{\boldsymbol{s}}_o$ if for an individual $\boldsymbol{z}_i = (\boldsymbol{x}_i, \boldsymbol{a}_i)$ belonging to that group, with non-protected attribute values $\boldsymbol{x}_i$ and protected attribute values $\boldsymbol{a}_i$, it is possible to find a similar individual belonging to a different group $\mathcal{Z}^{\boldsymbol{s}'}_o$, who receives the same outcome but a different counterfactual, i.e., if $\exists \boldsymbol{z}_i \in \mathcal{Z}^{\boldsymbol{s}}_o, \boldsymbol{z}_j \in \mathcal{Z}^{\boldsymbol{s}'}_o : ~ \boldsymbol{s} \neq \boldsymbol{s}' \wedge \boldsymbol{z}_i \sim \boldsymbol{z}_j \wedge \hat{y}_i = \hat{y}_j = o \wedge \boldsymbol{z}_i^c \neq \boldsymbol{z}_j^c$.
 \end{definition}
 
-About the motivating example, counterfactual group fairness via explicit bias ensures that the individual bias for female applicants (e.g., Mary) is not stronger than the bias for male applicants (e.g., John). This is not equivalent to an absolute absence of individual bias, but it highlights that the predictive system is not making decisions to penalise a specific group.
+Referring back to our example, counterfactual group fairness via explicit bias ensures that the individual bias for female applicants (e.g., Mary) is not stronger than the bias for male applicants (e.g., John). This is not equivalent to an absolute absence of individual bias, but it highlights that the predictive system is not making decisions to penalise a specific group.
 %
 On the other hand, by assessing group fairness through unequal treatment it is possible to ensure that similar individuals of different groups who were denied the loan (e.g., John and Mary) can obtain it by fulfilling the same requirements, without receiving different treatments based on their group belonging.
 
@@ -528,50 +528,54 @@ It is important to note that fairness is not guaranteed by the design in GridEx;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 The experiments conducted in this study consider sex and race as sensitive attributes, as described in the Adult Income dataset. However, since race does not significantly influence the counterfactuals or the classification process (we observed no differences based on racial subgroups), the results in \Cref{tab:res} refer only to gender and are not grouped based on race. These findings can also be verified by analysing \Cref{lst:rules}. The first two rules highlight that female and male individuals with the same characteristics (education and income) receive different outcomes based on their sex, while race is never considered in determining the outcome.
-
+%
 All results were averaged over 10 runs, each with different train/test splits and, consequently, different black-box model training.
 %
-As a result, the corresponding extraction techniques were also trained each time with a different set of instances.
+As a result, corresponding extraction techniques were also trained each time with a different set of instances.
 %
-Comprehensive results of our experiments are summarised in \Cref{tab:res}.
+Comprehensive experiment results are summarised in \Cref{tab:res}.
 
 \paragraph{Individual fairness results}
-The results of our experiments were compared with two widely used state-of-the-art metrics for individual fairness, namely fairness through awareness \cite{10.1145/2090236.2090255}, which quantifies pairs of similar individuals receiving the same classification, and counterfactual fairness \cite{NIPS2017_a486cd07}, which indicates if individuals receive the same outcome after changing their sensitive attributes.
+Our results were compared with two widely used state-of-the-art metrics for individual fairness, namely fairness through awareness \cite{10.1145/2090236.2090255}, which quantifies pairs of similar individuals receiving the same classification, and counterfactual fairness \cite{NIPS2017_a486cd07}, which indicates if individuals receive the same outcome even changing their sensitive attributes.
 %
-From the fairness measurements, it is notable that the results for KNN are generally less stable (higher standard deviation) than those obtained for the GB and SVM models, yet still aligned with their measurements.
+It is notable that the results for KNN are generally less stable (higher standard deviation) than those obtained for the GB and SVM models, yet still aligned with their measurements.
 %
 Overall, state-of-the-art metrics suggest that all classifiers exhibit approximately 90\% fairness, considering both fairness through awareness and counterfactual fairness.
 %
-According to our metrics, the individual explicit bias is around 30\% for all models, whereas the individual unequal treatment is around 40\%.
+As per our metrics, individual explicit bias is around 30\% for all models, whereas the individual unequal treatment is around 40\%.
 %
-This means that one individual out of three receives a counterfactual based on protected features, while two individuals out of five receive a different counterfactual compared to similar individuals receiving the same outcome.
+This means one-third of individuals receive a counterfactual based on protected features, and two-fifths receive a different counterfactual than similar individuals with the same outcome.
 %
 In other words, one individual out of three is required to change sex (possibly amongst other features) to have a decision reversal, and two individuals out of five are treated differently compared to similar individuals since they can obtain a decision swap by fulfilling different conditions.
 %
-Returning to our running example, let it be the case that John and Mary are similar in terms of socio-economic status, and both were denied a loan, which ensures fairness through awareness. Additionally, Mary is unable to obtain the loan even if she changes her sex to male, thus satisfying counterfactual fairness. 
+Referring back to our example, let it be the case that John and Mary are similar in terms of socio-economic status, and both were denied a loan, which ensures fairness through awareness. Additionally, Mary is unable to obtain the loan even if she changes her sex to male, thus satisfying counterfactual fairness. 
 %
 However, let's consider a scenario where, for Mary to get the loan, she needs to meet three conditions: changing her gender to male, increasing her income, and obtaining an additional master’s degree. In contrast, John only needs to increase his income. 
 %
 This situation exposes both explicit bias (Mary being required to change her gender) and unequal treatment compared to a similar individual (Mary being required to fulfil additional criteria beyond income, unlike John).
-
-These issues are not captured by state-of-the-art metrics. At first glance, the predictors might appear to be fairly unbiased, with only around 10\% biased behaviour. However, our metrics reveal a significantly higher percentage of bias, which aligns with expectations.
 %
-Explicit bias is not fully captured by existing metrics like counterfactual fairness, which typically only assess the impact of changing sensitive attributes (e.g., gender and/or race) on the decision outcome. They do not account for scenarios where changing gender in conjunction with other non-protected attributes leads to a different decision. Our explicit bias metric captures this more nuanced condition, identifying it as unfair. It is evident that cases detected by counterfactual fairness are a subset of those identified by our metric.
+These issues are not captured by state-of-the-art metrics. At first glance, the predictors might appear to be fairly unbiased, with around 10\% biased behaviour. However, our metrics reveal a significantly higher percentage of bias, aligned with expectations.
 %
-Fairness through awareness, which doe snot operate on counterfactuals, measures something entirely different. It does not assess whether changing sensitive attributes affects the decision or whether there is unequal treatment in decision-making.
+Explicit bias is not fully captured by existing metrics like counterfactual fairness, which typically only assess the impact of changing sensitive attributes (e.g., gender and/or race) on the outcome. They do not account for scenarios where changing gender in conjunction with other non-protected attributes leads to a different decision. Our explicit bias metric captures this more nuanced condition, identifying it as unfair. Cases detected by counterfactual fairness are a subset of those identified by our metric.
+%
+Fairness through awareness, which does not operate on counterfactuals, measures something entirely different. It does not assess whether changing sensitive attributes affects the decision or whether there is unequal treatment in decision-making.
 %
 Unequal treatment, not addressed by either existing metric, is however particularly interesting for adherence to current legislation.
 
 \paragraph{Group fairness results}
 For group fairness, we utilised the state-of-the-art disparate impact metric \cite{FeldmanFMSV15}, which measures the proportion of positive classifications across different groups.
-
+%
 From a group-level perspective, the disparate impact is very low, indicating the presence of bias. Similarly, explicit bias ranges from 63\% to 100\% depending on the classifier used. This suggests that positive outcomes are unevenly distributed between female and male applicants, and the decision bias varies across groups.
 %
 Notably, male individuals experience almost no bias, regardless of their outcomes, while female individuals face significant bias in decision-making. This disparity highlights that any male (or female) individual is treated differently from the most similar female (or male) individual with the same outcome, irrespective of the classifier.
 %
-Overall, there is a substantial bias against female individuals, showing that outcomes from black-box models are heavily influenced by sensitive attributes. This finding is corroborated by knowledge extracted using GridEx, which reveals that both positive and negative outcomes are dependent on protected features. This constitutes a clear source of unfairness, accurately captured by all metrics. The advantage of our metrics lies in their ability to specifically identify the cause of the bias, enabling the implementation of targeted policies for its elimination.
+Overall, there is a substantial bias against female individuals, showing that sensitive attributes heavily influence outcomes from black-box models. This finding is corroborated by knowledge extracted using GridEx, which reveals that both positive and negative outcomes are dependent on protected features. This constitutes a clear source of unfairness, accurately captured by all metrics. The advantage of our metrics lies in their ability to specifically identify the cause of the bias, enabling the implementation of targeted policies for its elimination.
 
-All analyses and provided percentages offer an automated basis that can assist legal experts in determining whether \emph{prima facie} discrimination is present. Therefore, these results are highly effective in providing a concise overview of the situation, highlighting scenarios that traditional methods might overlook.
+Finally, individual and group comprehensive fairness metrics are also presented, aggregating the values to provide an overall picture. The individual fairness score is approximately 0.4, indicating an unfairness of 0.6. This unfairness is composed of bias (0.3) and unequal treatment (0.4). The total is not 0.7 because some individuals are affected by both factors and thus contribute to the calculation only once.
+%
+As expected, the group fairness score is 0.00, reflecting the fact that each individual experiences unequal treatment. In this case, the comprehensive single value highlights the discrepancy with state-of-the-art techniques, which do not fully capture the presence of bias.
+
+All analyses and provided percentages offer an automated basis that can assist legal experts in determining whether \emph{prima facie} discrimination is present. Therefore, these results effectively provide a concise overview of the situation, highlighting scenarios that traditional methods might overlook.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
