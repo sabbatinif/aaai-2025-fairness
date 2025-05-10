@@ -1,22 +1,36 @@
-%File: anonymous-submission-latex-2025.tex
-\documentclass[letterpaper]{article} % DO NOT CHANGE THIS
-\usepackage[submission]{aaai25}  % DO NOT CHANGE THIS
-\usepackage{times}  % DO NOT CHANGE THIS
-\usepackage{helvet}  % DO NOT CHANGE THIS
-\usepackage{courier}  % DO NOT CHANGE THIS
-\usepackage[hyphens]{url}  % DO NOT CHANGE THIS
-\usepackage{graphicx} % DO NOT CHANGE THIS
-\urlstyle{rm} % DO NOT CHANGE THIS
-\def\UrlFont{\rm}  % DO NOT CHANGE THIS
-\usepackage{natbib}  % DO NOT CHANGE THIS AND DO NOT ADD ANY OPTIONS TO IT
-\usepackage{caption} % DO NOT CHANGE THIS AND DO NOT ADD ANY OPTIONS TO IT
-\frenchspacing  % DO NOT CHANGE THIS
-\setlength{\pdfpagewidth}{8.5in} % DO NOT CHANGE THIS
-\setlength{\pdfpageheight}{11in} % DO NOT CHANGE THIS
-%
-% These are recommended to typeset algorithms but not required. See the subsubsection on algorithms. Remove them if you don't have algorithms in your paper.
+%%%% kr-instructions.tex -- version 1.3 (11-Jan-2021)
+
+\typeout{KR2025 Instructions for Authors}
+
+% These are the instructions for authors for KR-25.
+
+\documentclass{article}
+\pdfpagewidth=8.5in
+\pdfpageheight=11in
+
+\usepackage{kr}
+
+% Use the postscript times font!
+\usepackage{times}
+\usepackage{soul}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[small]{caption}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{booktabs}
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\urlstyle{same}
+
+% See https://www.overleaf.com/learn/latex/theorems_and_proofs
+% for a nice explanation of how to define new theorems, but keep
+% in mind that the amsthm package is already included in this
+% template and that you must *not* alter the styling.
+\newtheorem{example}{Example}
+\newtheorem{theorem}{Theorem}
 
 %
 % These are are recommended to typeset listings but not required. See the subsubsection on listing. Remove this block if you don't have listings in your paper.
@@ -39,6 +53,8 @@
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
 
+\newcommand{\citet}[1]{\cite{#1}}
+
 \DeclareCaptionStyle{ruled}{labelfont=normalfont,labelsep=colon,strut=off} % DO NOT CHANGE THIS
 \lstset{%
 	basicstyle={\footnotesize\ttfamily},% footnotesize acceptable for monospace
@@ -49,74 +65,31 @@
 \newfloat{listing}{tb}{lst}{}
 \floatname{listing}{Listing}
 %
-% Keep the \pdfinfo as shown here. There's no need
-% for you to add the /Title and /Author tags.
+% To use for other conferences, change references to files and the
+% conference appropriate and use other authors, contacts, publishers, and
+% organizations.
+% Also change the deadline and address for returning papers and the length and
+% page charge instructions.
+% Put where the files are available in the appropriate places.
+%PDF Info Is REQUIRED.
 \pdfinfo{
-/TemplateVersion (2025.1)
+	/TemplateVersion (KR.2022.0, KR.2023.0, KR.2024.0, KR.2025.0)
 }
 
-% DISALLOWED PACKAGES
-% \usepackage{authblk} -- This package is specifically forbidden
-% \usepackage{balance} -- This package is specifically forbidden
-% \usepackage{color (if used in text)
-% \usepackage{CJK} -- This package is specifically forbidden
-% \usepackage{float} -- This package is specifically forbidden
-% \usepackage{flushend} -- This package is specifically forbidden
-% \usepackage{fontenc} -- This package is specifically forbidden
-% \usepackage{fullpage} -- This package is specifically forbidden
-% \usepackage{geometry} -- This package is specifically forbidden
-% \usepackage{grffile} -- This package is specifically forbidden
-% \usepackage{hyperref} -- This package is specifically forbidden
-% \usepackage{navigator} -- This package is specifically forbidden
-% (or any other package that embeds links such as navigator or hyperref)
-% \indentfirst} -- This package is specifically forbidden
-% \layout} -- This package is specifically forbidden
-% \multicol} -- This package is specifically forbidden
-% \nameref} -- This package is specifically forbidden
-% \usepackage{savetrees} -- This package is specifically forbidden
-% \usepackage{setspace} -- This package is specifically forbidden
-% \usepackage{stfloats} -- This package is specifically forbidden
-% \usepackage{tabu} -- This package is specifically forbidden
-% \usepackage{titlesec} -- This package is specifically forbidden
-% \usepackage{tocbibind} -- This package is specifically forbidden
-% \usepackage{ulem} -- This package is specifically forbidden
-% \usepackage{wrapfig} -- This package is specifically forbidden
-% DISALLOWED COMMANDS
-% \nocopyright -- Your paper will not be published if you use this command
-% \addtolength -- This command may not be used
-% \balance -- This command may not be used
-% \baselinestretch -- Your paper will not be published if you use this command
-% \clearpage -- No page breaks of any kind may be used for the final version of your paper
-% \columnsep -- This command may not be used
-% \newpage -- No page breaks of any kind may be used for the final version of your paper
-% \pagebreak -- No page breaks of any kind may be used for the final version of your paperr
-% \pagestyle -- This command may not be used
-% \tiny -- This is not an acceptable font size.
-% \vspace{- -- No negative value may be used in proximity of a caption, figure, table, section, subsection, subsubsection, or reference
-% \vskip{- -- No negative value may be used to alter spacing above or below a caption, figure, table, section, subsection, subsubsection, or reference
-
-\setcounter{secnumdepth}{0} %May be changed to 1 or 2 if section numbers are desired.
-
-% The file aaai25.sty is the style file for AAAI Press
-% proceedings, working notes, and technical reports.
-%
-
-% Title
-
-% Your title must be in mixed case, not sentence case.
-% That means all verbs (including short verbs like be, is, using,and go),
-% nouns, adverbs, adjectives should be capitalized, including both words in hyphenated terms, while
-% articles, conjunctions, and prepositions are lower case unless they
-% directly follow a colon or long dash
 \title{Individual and Group Fairness Assessments via Counterfactual Explanations}
-\author{
-    Federico Sabbatini\textsuperscript{\rm 1}, Roberta Calegari\textsuperscript{\rm 2}
-}
-\affiliations{
-    %Afiliations
-    \textsuperscript{\rm 1}University of Urbino\\
-    \textsuperscript{\rm 2}University of Bologna\\
-}
+
+%\author{%
+%    Federico Sabbatini$^1$\and
+%	Roberta Calegari$^2$\\
+%	\affiliations
+%	$^1$University of Urbino\\
+%	$^2$University of Bologna\\
+%	\emails
+%	f.sabbatini1@campus.uniurb.it,
+%	roberta.calegari@unibo.it
+%}
+
+\author{Anonymous submission}
 
 \begin{document}
 
@@ -364,58 +337,58 @@ The objective of this data set is to predict whether an individual's annual inco
 %
 Therefore, it has gained significant popularity within the algorithmic fairness community as a reliable benchmark for evaluating and comparing the effectiveness of fair ML techniques.
 %
-%The data set feature characteristics are summarized in \Cref{tab:adult}.
+The data set feature characteristics are summarized in \Cref{tab:adult}.
 
-%\begin{table*}[t!]
-%	\begin{center}{\caption{Characteristics of the Adult data set features.}\label{tab:adult}}
-%		\begin{tabular}{lllc}
-%			\toprule
-%			Feature name & Domain & Description & Missing values \\
-%			\midrule					
-%			age & Numeric, integer (17 -- 90) & Age & \\
-%			workclass & Categoric (8 values) & Employment status & $\times$ \\
-%			fnlwgt & Numeric, integer (12\,285 -- 1\,490\,400) & Individual representativeness & \\
-%			education & Categoric (16 values) & Highest education level & \\
-%			education-num & Numeric, integer (1 -- 16) & Highest education level & \\
-%			marital-status & Categoric (7 values) & Marital status & \\
-%			occupation & Categoric (14 values) & General occupation class & $\times$ \\
-%			relationship & Categoric (6 values) & Relationship with other individuals & \\
-%			race & Categoric (5 values) & Race & \\
-%			sex & Categoric (2 values) & Gender & \\
-%			capital-gain & Numeric, integer (0 -- 99\,999) & Capital gain & \\
-%			capital-loss & Numeric, integer (0 -- 4\,356) & Capital loss & \\
-%			hours-per-week & Numeric, integer (1 -- 99) & Working hours per week & \\
-%			native-country & Categoric (41 values) & Origin country & $\times$ \\
-%			\midrule
-%			income & Categoric (2 values) & Income & \\
-%			\bottomrule
-%		\end{tabular}
-%	\end{center}
-%\end{table*}
+\begin{table*}[t!]
+	\begin{center}{\caption{Characteristics of the Adult data set features.}\label{tab:adult}}
+		\begin{tabular}{lllc}
+			\toprule
+			Feature name & Domain & Description & Missing values \\
+			\midrule					
+			age & Numeric, integer (17 -- 90) & Age & \\
+			workclass & Categoric (8 values) & Employment status & $\times$ \\
+			fnlwgt & Numeric, integer (12\,285 -- 1\,490\,400) & Individual representativeness & \\
+			education & Categoric (16 values) & Highest education level & \\
+			education-num & Numeric, integer (1 -- 16) & Highest education level & \\
+			marital-status & Categoric (7 values) & Marital status & \\
+			occupation & Categoric (14 values) & General occupation class & $\times$ \\
+			relationship & Categoric (6 values) & Relationship with other individuals & \\
+			race & Categoric (5 values) & Race & \\
+			sex & Categoric (2 values) & Gender & \\
+			capital-gain & Numeric, integer (0 -- 99\,999) & Capital gain & \\
+			capital-loss & Numeric, integer (0 -- 4\,356) & Capital loss & \\
+			hours-per-week & Numeric, integer (1 -- 99) & Working hours per week & \\
+			native-country & Categoric (41 values) & Origin country & $\times$ \\
+			\midrule
+			income & Categoric (2 values) & Income & \\
+			\bottomrule
+		\end{tabular}
+	\end{center}
+\end{table*}
 
 % Our fairness experiments employ a set of opaque classifiers trained on the Adult Income data set, i.e., a gradient boosting (GB), a K-nearest neighbor (KNN) and a support vector machine (SVM) whose hyper-parameters are resumed in \Cref{tab:bb}.
 
-%\begin{table}[t!]
-%\scriptsize{
-%	\begin{center}{\caption{Performance of the black-box (BB) predictors employed in our experiments. The fidelity achieved by the knowledge extractors applied to the BBs is also reported. Average values over 10 runs are reported.}\label{tab:bb}}
-%		\begin{tabular}{lll}
-%			\toprule
-%			BB & BB accuracy & Extractor fidelity  \\
-%			\midrule					
-%			GB & 0.85 $\pm$ 0.00 & 0.88 $\pm$ 0.00 \\
-%			\midrule
-%			KNN & 0.82 $\pm$ 0.00 & 0.90 $\pm$ 0.00 \\
-%			\midrule
-%			SVM & 0.83 $\pm$ 0.00 & 0.88 $\pm$ 0.00 \\
-%			\bottomrule
-%		\end{tabular}
-%	\end{center}
-%}
-%\end{table}
+\begin{table}[t!]
+	\begin{center}{\caption{Performance of the black-box (BB) predictors employed in our experiments. The fidelity achieved by the knowledge extractors applied to the BBs is also reported. Average values over 10 runs are reported.}\label{tab:bb}}
+		\begin{tabular}{lll}
+			\toprule
+			BB & BB accuracy & Extractor fidelity  \\
+			\midrule					
+			GB & 0.85 $\pm$ 0.00 & 0.88 $\pm$ 0.00 \\
+			\midrule
+			KNN & 0.82 $\pm$ 0.00 & 0.90 $\pm$ 0.00 \\
+			\midrule
+			SVM & 0.83 $\pm$ 0.00 & 0.88 $\pm$ 0.00 \\
+			\midrule
+			ANN & 0.87 $\pm$ 0.00 & 0.90 $\pm$ 0.00 \\
+			\bottomrule
+		\end{tabular}
+	\end{center}
+\end{table}
 
 \paragraph{Data preparation and model training}
 
-Our experiments employ a set of opaque classifiers trained on the Adult Income data set: a gradient boosting (GB), a K-nearest neighbour (KNN) and a support vector machine (SVM). 
+Our experiments employ a set of opaque classifiers trained on the Adult Income data set: a gradient boosting (GB), a K-nearest neighbour (KNN), a support vector machine (SVM) and an artificial neural network (ANN). Corresponding classification accuracies are listed in \Cref{tab:bb}.
 %
 The GB adopted 200 base estimators and a learning rate of 0.2.
 %
@@ -458,39 +431,37 @@ The result of the knowledge-extraction process is a set of symbolic rules expres
 An example is shown in \Cref{lst:rules}.
 
 \begin{table*}[t!]
-\small{
 	\begin{center}{\caption{Experiment results. $f$ and $m$ denote individual groups based on female and male sex, respectively. $+$ and $-$ denote positive and negative outcomes, respectively. Accuracy of the black boxes and fidelity of knowledge extractors are also reported.}\label{tab:res}}
-		\begin{tabular}{ll|c|c|c}
+		\begin{tabular}{ll|c|c|c|c}
 			\toprule
-			Metrics $\downarrow$ & Black box $\rightarrow$ & GB & KNN & SVM \\
+			\multicolumn{2}{l|}{Metrics $\downarrow$ \hfill Black box $\rightarrow$} & GB & KNN & SVM & ANN \\
 			\midrule
-			Black-box accuracy & & 0.85 $\pm$ 0.00 & 0.82 $\pm$ 0.00 & 0.83 $\pm$ 0.00 \\
-			Extractor fidelity & & 0.88 $\pm$ 0.00 & 0.90 $\pm$ 0.00 & 0.88 $\pm$ 0.00 \\
+%			Black-box accuracy & & 0.85 $\pm$ 0.00 & 0.82 $\pm$ 0.00 & 0.83 $\pm$ 0.00 \\
+%			Extractor fidelity & & 0.88 $\pm$ 0.00 & 0.90 $\pm$ 0.00 & 0.88 $\pm$ 0.00 \\
+%			\midrule
+			Individual fairness: & & & & & \\
+			~ ~ Fairness through awareness & & 0.92 $\pm$ 0.00 & 0.94 $\pm$ 0.00 & 0.95 $\pm$ 0.00 & 0.93 $\pm$ 0.00 \\
+			~ ~ Counterfactual fairness & & 0.89 $\pm$ 0.00 & 0.87 $\pm$ 0.00 & 0.89 $\pm$ 0.00 & 0.89 $\pm$ 0.00 \\
+			~ ~ Explicit bias & $\Phi_b^i$ & 0.31 $\pm$ 0.00 & 0.30 $\pm$ 0.04 & 0.33 $\pm$ 0.00 & 0.32 $\pm$ 0.00 \\
+			~ ~ Unequal treatment & $\Phi_t^i$ & 0.38 $\pm$ 0.00 & 0.40 $\pm$ 0.00 & 0.40 $\pm$ 0.00 & 0.40 $\pm$ 0.00 \\
+			~ ~ \textbf{Individual comprehensive fairness} & & 0.43 $\pm$ 0.01 & 0.42 $\pm$ 0.03 & 0.40 $\pm$ 0.00 & 0.42 $\pm$ 0.00 \\
 			\midrule
-			Individual fairness: & & & & \\
-			~ ~ Fairness through awareness & & 0.92 $\pm$ 0.00 & 0.94 $\pm$ 0.00 & 0.95 $\pm$ 0.00 \\
-			~ ~ Counterfactual fairness & & 0.89 $\pm$ 0.00 & 0.87 $\pm$ 0.00 & 0.89 $\pm$ 0.00 \\
-			~ ~ Explicit bias & $\Phi_b^i$ & 0.31 $\pm$ 0.00 & 0.30 $\pm$ 0.04 & 0.33 $\pm$ 0.00 \\
-			~ ~ Unequal treatment & $\Phi_t^i$ & 0.38 $\pm$ 0.00 & 0.40 $\pm$ 0.00 & 0.40 $\pm$ 0.00 \\
-			~ ~ \textbf{Individual comprehensive fairness} & & 0.43 $\pm$ 0.01 & 0.42 $\pm$ 0.03 & 0.40 $\pm$ 0.00 \\
-			\midrule
-			Group fairness: & & & & \\
-			~ ~ Disparate impact & & 0.17 $\pm$ 0.00 & 0.08 $\pm$ 0.01 & 0.14 $\pm$ 0.01 \\
-			~ ~ Explicit bias & $\Phi_b^g$ & 0.63 $\pm$ 0.08 & 0.91 $\pm$ 0.12 & 1.00 $\pm$ 0.00 \\
-			~ ~ ~ ~ Male group, positive outcome & $\phi_b^{m,+}$ & 0.33 $\pm$ 0.00 & 0.03 $\pm$ 0.00 & 0.03 $\pm$ 0.00 \\
-			~ ~ ~ ~ Female group, positive outcome & $\phi_b^{f,+}$ & 0.42 $\pm$ 0.02 & 0.36 $\pm$ 0.13 & 0.98 $\pm$ 0.01 \\
-			~ ~ ~ ~ Male group, negative outcome & $\phi_b^{m,-}$ & 0.07 $\pm$ 0.03 & 0.00 $\pm$ 0.00 & 0.00 $\pm$ 0.00 \\
-			~ ~ ~ ~ Female group, negative outcome & $\phi_b^{f,-}$ & 0.70 $\pm$ 0.05 & 0.91 $\pm$ 0.12 & 1.00 $\pm$ 0.00 \\
-			~ ~ Unequal treatment & $\Phi_t^g$ & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 \\
-			~ ~ ~ ~ Male group versus female group, positive outcome & $\phi_t^{m,f,+}$ & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 \\
-			~ ~ ~ ~ Female group versus male group, positive outcome & $\phi_t^{f,m,+}$ & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 \\
-			~ ~ ~ ~ Male group versus female group, negative outcome & $\phi_t^{m,f,-}$ & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 \\
-			~ ~ ~ ~ Female group versus male group, negative outcome & $\phi_t^{f,m,-}$ & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 \\
-			~ ~ \textbf{Group comprehensive fairness} & & 0.00 $\pm$ 0.00 & 0.00 $\pm$ 0.00 & 0.00 $\pm$ 0.00 \\
+			Group fairness: & & & & & \\
+			~ ~ Disparate impact & & 0.17 $\pm$ 0.00 & 0.08 $\pm$ 0.01 & 0.14 $\pm$ 0.01 & 0.12 $\pm$ 0.00 \\
+			~ ~ Explicit bias & $\Phi_b^g$ & 0.63 $\pm$ 0.08 & 0.91 $\pm$ 0.12 & 1.00 $\pm$ 0.00 & 0.95 $\pm$ 0.00 \\
+			~ ~ ~ ~ Male group, positive outcome & $\phi_b^{m,+}$ & 0.33 $\pm$ 0.00 & 0.03 $\pm$ 0.00 & 0.03 $\pm$ 0.00 & 0.05 $\pm$ 0.00 \\
+			~ ~ ~ ~ Female group, positive outcome & $\phi_b^{f,+}$ & 0.42 $\pm$ 0.02 & 0.36 $\pm$ 0.13 & 0.98 $\pm$ 0.01 & 0.44 $\pm$ 0.00 \\
+			~ ~ ~ ~ Male group, negative outcome & $\phi_b^{m,-}$ & 0.07 $\pm$ 0.03 & 0.00 $\pm$ 0.00 & 0.00 $\pm$ 0.00 & 0.05 $\pm$ 0.00 \\
+			~ ~ ~ ~ Female group, negative outcome & $\phi_b^{f,-}$ & 0.70 $\pm$ 0.05 & 0.91 $\pm$ 0.12 & 1.00 $\pm$ 0.00 & 0.93 $\pm$ 0.00 \\
+			~ ~ Unequal treatment & $\Phi_t^g$ & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 \\
+			~ ~ ~ ~ Male versus female group, positive outcome & $\phi_t^{m,f,+}$ & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00\\
+			~ ~ ~ ~ Female versus male group, positive outcome & $\phi_t^{f,m,+}$ & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00\\
+			~ ~ ~ ~ Male versus female group, negative outcome & $\phi_t^{m,f,-}$ & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00\\
+			~ ~ ~ ~ Female versus male group, negative outcome & $\phi_t^{f,m,-}$ & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00 & 1.00 $\pm$ 0.00\\
+			~ ~ \textbf{Group comprehensive fairness} & & 0.00 $\pm$ 0.00 & 0.00 $\pm$ 0.00 & 0.00 $\pm$ 0.00 & 0.00 $\pm$ 0.00\\
 			\bottomrule
 		\end{tabular}
 	\end{center}
-}
 \end{table*}
 
 \begin{listing*}[t!]
@@ -597,55 +568,8 @@ All analyses and provided percentages offer an automated basis that can assist l
 %%
 %Additionally, more generalised definitions incorporating causality will be explored.
 
-\section{Acknowledgments}
-
-%\bibliographystyle{aaai25}
+%% The file kr.bst is a bibliography style file for BibTeX 0.99c
+\bibliographystyle{kr}
 \bibliography{mybibfile}
-
-\section{Reproducibility Checklist}
-
-This paper:
-\begin{itemize}
-	\item Includes a conceptual outline and/or pseudocode description of AI methods introduced: yes
-	\item Clearly delineates statements that are opinions, hypothesis, and speculation from objective facts and results: yes
-	\item Provides well marked pedagogical references for less-familiare readers to gain background necessary to replicate the paper: yes
-\end{itemize}
-
-This paper make theoretical contributions:
-\begin{itemize}
-	\item All assumptions and restrictions are stated clearly and formally: yes
-	\item All novel claims are stated formally (e.g., in theorem statements): yes
-	\item Proofs of all novel claims are included: yes
-	\item Proof sketches or intuitions are given for complex and/or novel results: yes
-	\item Appropriate citations to theoretical tools used are given: yes
-	\item All theoretical claims are demonstrated empirically to hold: yes
-	\item All experimental code used to eliminate or disprove claims is included: yes
-\end{itemize}
-
-This paper rely on one or more:
-\begin{itemize}
-	\item A motivation is given for why the experiments are conducted on the selected datasets: yes
-	\item All novel datasets introduced in this paper are included in a data appendix: NA
-	\item All novel datasets introduced in this paper will be made publicly available upon publication of the paper with a license that allows free usage for research purposes: NA
-	\item All datasets drawn from the existing literature (potentially including authors’ own previously published work) are accompanied by appropriate citations: yes
-	\item All datasets drawn from the existing literature (potentially including authors’ own previously published work) are publicly available: yes
-	\item All datasets that are not publicly available are described in detail, with explanation why publicly available alternatives are not scientifically satisficing: NA
-\end{itemize}
-
-This paper include computational experiments:
-\begin{itemize}
-	\item Any code required for pre-processing data is included in the appendix: yes
-	\item All source code required for conducting and analyzing the experiments is included in a code appendix: yes
-	\item All source code required for conducting and analyzing the experiments will be made publicly available upon publication of the paper with a license that allows free usage for research purposes: yes
-	\item All source code implementing new methods have comments detailing the implementation, with references to the paper where each step comes from: yes
-	\item If an algorithm depends on randomness, then the method used for setting seeds is described in a way sufficient to allow replication of results: yes
-	\item This paper specifies the computing infrastructure used for running experiments (hardware and software), including GPU/CPU models; amount of memory; operating system; names and versions of relevant software libraries and frameworks: partial
-	\item This paper formally describes evaluation metrics used and explains the motivation for choosing these metrics: yes
-	\item This paper states the number of algorithm runs used to compute each reported result: yes
-	\item Analysis of experiments goes beyond single-dimensional summaries of performance (e.g., average; median) to include measures of variation, confidence, or other distributional information: yes
-	\item The significance of any improvement or decrease in performance is judged using appropriate statistical tests (e.g., Wilcoxon signed-rank): partial
-	\item This paper lists all final (hyper-)parameters used for each model/algorithm in the paper’s experiments: yes
-	\item This paper states the number and range of values tried per (hyper-) parameter during development of the paper, along with the criterion used for selecting the final parameter setting: partial
-\end{itemize}
 
 \end{document}
